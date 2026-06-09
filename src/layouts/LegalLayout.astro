@@ -1,0 +1,60 @@
+---
+import Layout from './Layout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+---
+
+<Layout title={title} description={description}>
+  <article class="legal">
+    <slot />
+  </article>
+</Layout>
+
+<style>
+  .legal {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    border-top: 4px solid #0f4c35;
+  }
+
+  /* Slotted content lives in the child page's scope, so pierce it with :global() */
+  .legal :global(h1) {
+    color: #0f4c35;
+    margin-bottom: 0.5rem;
+  }
+  .legal :global(.updated) {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 2rem;
+  }
+  .legal :global(.lead) {
+    color: #475569;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+  .legal :global(h2) {
+    color: #1a7d53;
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.5rem;
+  }
+  .legal :global(p),
+  .legal :global(li) {
+    color: #374151;
+    line-height: 1.8;
+  }
+  .legal :global(p) { margin-top: 1rem; }
+  .legal :global(ul) {
+    margin-top: 1rem;
+    padding-left: 1.25rem;
+  }
+  .legal :global(li) { margin-top: 0.4rem; }
+  .legal :global(a) { color: #1a7d53; font-weight: 600; }
+</style>

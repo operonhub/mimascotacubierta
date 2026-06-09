@@ -1,6 +1,120 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import LegalLayout from '../layouts/LegalLayout.astro';
 ---
-<Layout title="Contacto">
-	<h1>Contacto</h1>
-</Layout>
+
+<LegalLayout
+  title="Contacto | MiMascotaCubierta.com"
+  description="Contactá al equipo de MiMascotaCubierta.com para consultas, correcciones o propuestas comerciales."
+>
+  <h1>Contacto</h1>
+  <p class="lead">Respondemos dentro de las 48 horas hábiles.</p>
+
+  <form
+    class="contact-form"
+    action="mailto:admin@operonhub.com"
+    method="POST"
+    enctype="text/plain"
+  >
+    <div class="field">
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" name="Nombre" required />
+    </div>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="Email" required />
+    </div>
+
+    <div class="field">
+      <label for="asunto">Asunto</label>
+      <select id="asunto" name="Asunto">
+        <option>Consulta general</option>
+        <option>Corrección de datos</option>
+        <option>Propuesta comercial</option>
+        <option>Otro</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="mensaje">Mensaje</label>
+      <textarea id="mensaje" name="Mensaje" rows="6" minlength="20" required></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn">Enviar mensaje</button>
+  </form>
+
+  <div class="contact-extra">
+    <p><strong>Email directo:</strong> <a href="mailto:admin@operonhub.com">admin@operonhub.com</a></p>
+    <p class="note">
+      Para correcciones urgentes de datos de seguros, indicá
+      «Corrección de datos» en el asunto.
+    </p>
+  </div>
+</LegalLayout>
+
+<style>
+  .contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .field label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #374151;
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    padding: 0.7rem 0.85rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #1a1d23;
+    background: #fff;
+  }
+  .field textarea { resize: vertical; }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: #1a7d53;
+    box-shadow: 0 0 0 3px rgba(26,125,83,0.15);
+  }
+  .submit-btn {
+    background: #0f4c35;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.85rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .submit-btn:hover { background: #1a7d53; }
+
+  .contact-extra {
+    max-width: 600px;
+    margin: 1.75rem auto 0;
+    text-align: center;
+  }
+  .contact-extra p { margin-top: 0.5rem; }
+  .contact-extra .note {
+    font-size: 0.85rem;
+    color: #94a3b8;
+  }
+</style>

@@ -1,0 +1,116 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+
+const cookies = [
+  { nombre: '_ga', proveedor: 'Google Analytics', finalidad: 'Análisis de tráfico anónimo', duracion: '2 años' },
+  { nombre: '_ga_*', proveedor: 'Google Analytics', finalidad: 'Sesión de Analytics', duracion: '2 años' },
+  { nombre: 'IDE', proveedor: 'Google AdSense', finalidad: 'Personalización de anuncios', duracion: '1 año' },
+  { nombre: 'CONSENT', proveedor: 'Google', finalidad: 'Preferencias de consentimiento', duracion: '2 años' },
+];
+---
+
+<LegalLayout
+  title="Política de Cookies | MiMascotaCubierta.com"
+  description="Información sobre el uso de cookies en MiMascotaCubierta.com."
+>
+  <h1>Política de Cookies</h1>
+  <p class="updated">Última actualización: Junio 2026</p>
+
+  <h2>1. ¿Qué son las cookies?</h2>
+  <p>
+    Las cookies son pequeños archivos que un sitio web guarda en tu navegador. Sirven
+    para recordar tus preferencias y entender cómo se usa el sitio.
+  </p>
+
+  <h2>2. Cookies que usamos</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Cookie</th>
+          <th>Proveedor</th>
+          <th>Finalidad</th>
+          <th>Duración</th>
+        </tr>
+      </thead>
+      <tbody>
+        {cookies.map((c) => (
+          <tr>
+            <td><code>{c.nombre}</code></td>
+            <td>{c.proveedor}</td>
+            <td>{c.finalidad}</td>
+            <td>{c.duracion}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>3. Cookies de terceros</h2>
+  <p>
+    Google Analytics y Google AdSense pueden instalar sus propias cookies. Podés
+    consultar sus políticas en
+    <a href="https://analytics.google.com" target="_blank" rel="noopener">analytics.google.com</a>
+    y
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>.
+  </p>
+
+  <h2>4. Cómo desactivar las cookies</h2>
+  <p>Podés gestionar o eliminar las cookies desde la configuración de tu navegador:</p>
+  <ul>
+    <li><strong>Chrome:</strong> Configuración → Privacidad y seguridad → Cookies y otros datos de sitios.</li>
+    <li><strong>Firefox:</strong> Ajustes → Privacidad &amp; Seguridad → Cookies y datos del sitio.</li>
+    <li><strong>Safari:</strong> Preferencias → Privacidad → Gestionar datos de sitios web.</li>
+  </ul>
+
+  <h2>5. Más información</h2>
+  <p>
+    Si tenés dudas sobre nuestra política de cookies, escribinos a
+    <a href="mailto:admin@operonhub.com">admin@operonhub.com</a>.
+  </p>
+</LegalLayout>
+
+<style>
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-top: 1rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.9rem;
+    min-width: 520px;
+  }
+  thead { background: #f8fafc; }
+  th {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #64748b;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+  }
+  td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: #374151;
+    vertical-align: middle;
+  }
+  tbody tr:nth-child(even) { background: #f8fafc; }
+  tbody tr:last-child td { border-bottom: none; }
+  code {
+    background: #f0fdf4;
+    color: #0f4c35;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+</style>
