@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Comparador from '../components/Comparador.astro';
 ---
 
 <Layout
@@ -28,50 +29,10 @@ import Layout from '../layouts/Layout.astro';
   <section class="comparador">
     <div class="container">
       <div class="section-header">
-        <h2>Los mejores seguros de mascotas en 2026</h2>
-        <p class="section-sub">Actualizado mensualmente · México y Argentina</p>
+        <h2>Los mejores seguros de mascotas</h2>
+        <p class="section-sub">Comparamos precios y coberturas reales en Argentina y México</p>
       </div>
-      <div class="table-wrap">
-        <span class="badge-placeholder">DATOS PLACEHOLDER</span>
-        <table>
-          <thead>
-            <tr>
-              <th>Aseguradora</th>
-              <th>Precio desde</th>
-              <th>Cirugía</th>
-              <th>Consultas</th>
-              <th>Puntuación</th>
-              <th>Ver oferta</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="td-name">GNP Mascotas</td>
-              <td>$299 MXN/mes</td>
-              <td class="td-check">✓</td>
-              <td class="td-check">✓</td>
-              <td>⭐ 4.5</td>
-              <td><a href="/comparar" class="btn-table">Ver oferta</a></td>
-            </tr>
-            <tr>
-              <td class="td-name">Sancor Seguros</td>
-              <td>$8.500 ARS/mes</td>
-              <td class="td-check">✓</td>
-              <td class="td-check">✓</td>
-              <td>⭐ 4.3</td>
-              <td><a href="/comparar" class="btn-table">Ver oferta</a></td>
-            </tr>
-            <tr>
-              <td class="td-name">MAPFRE Mascotas</td>
-              <td>$350 MXN/mes</td>
-              <td class="td-check">✓</td>
-              <td class="td-cross">✗</td>
-              <td>⭐ 4.1</td>
-              <td><a href="/comparar" class="btn-table">Ver oferta</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <Comparador mode="preview" />
       <div class="section-cta">
         <a href="/comparar" class="btn btn-outline">Ver comparativa completa →</a>
       </div>
@@ -282,67 +243,6 @@ import Layout from '../layouts/Layout.astro';
   padding: 5rem 0;
   background: #ffffff;
 }
-.table-wrap {
-  position: relative;
-  overflow-x: auto;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  margin-bottom: 0;
-  -webkit-overflow-scrolling: touch;
-}
-.badge-placeholder {
-  position: absolute;
-  top: 0.6rem;
-  right: 0.6rem;
-  background: #fef9c3;
-  color: #92400e;
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  letter-spacing: 0.06em;
-  z-index: 2;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.93rem;
-  min-width: 560px;
-}
-thead { background: #f8fafc; }
-th {
-  padding: 0.9rem 1.25rem;
-  text-align: left;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #64748b;
-  border-bottom: 1px solid #e2e8f0;
-}
-td {
-  padding: 1rem 1.25rem;
-  border-bottom: 1px solid #f1f5f9;
-  color: #1a1d23;
-}
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: #fafbfc; }
-.td-name { font-weight: 600; }
-.td-check { color: #16a34a; font-weight: 700; font-size: 1.1rem; }
-.td-cross { color: #dc2626; font-weight: 700; font-size: 1.1rem; }
-.btn-table {
-  display: inline-block;
-  padding: 0.4rem 1rem;
-  background: #0f4c35;
-  color: #ffffff;
-  border-radius: 6px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.15s;
-  white-space: nowrap;
-}
-.btn-table:hover { background: #1a7d53; text-decoration: none; }
 
 /* ── Categorías ──────────────────────────────────── */
 .categorias {

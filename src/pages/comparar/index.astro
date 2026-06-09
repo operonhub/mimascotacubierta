@@ -1,6 +1,174 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Comparador from '../../components/Comparador.astro';
+
+const faqs = [
+  {
+    q: '¿Qué cubre un seguro de mascotas?',
+    a: 'Depende del plan, pero en general cubre consultas veterinarias, urgencias y, en planes más completos, cirugías, hospitalización, vacunas, responsabilidad civil frente a daños a terceros y cobertura por extravío. Antes de contratar conviene revisar topes, carencias y exclusiones de cada póliza.',
+  },
+  {
+    q: '¿Cuánto cuesta un seguro para perros en Argentina?',
+    a: 'Los planes que relevamos van desde aproximadamente $11.400 ARS por mes (Naranja X Plan Básico) hasta $22.168 ARS por mes (Life Seguros Plan Full), según el nivel de cobertura. Los precios se actualizan mensualmente porque varían con la inflación.',
+  },
+  {
+    q: '¿Vale la pena contratar un seguro para mi mascota?',
+    a: 'Si te preocupa la previsibilidad ante gastos veterinarios altos —como una cirugía o una internación— un seguro puede ahorrarte dinero y estrés. Para mascotas jóvenes y sanas el costo-beneficio es menor, pero la responsabilidad civil y la cobertura por extravío siguen siendo útiles.',
+  },
+  {
+    q: '¿Cuál es el mejor seguro de mascotas en Argentina?',
+    a: 'No existe un único "mejor": depende de tus prioridades. Si buscás el precio más bajo, Naranja X Plan Básico es la opción más económica. Si querés la cobertura más amplia, con vacunas y responsabilidad civil, Life Seguros Plan Full es el más completo de los que comparamos.',
+  },
+  {
+    q: '¿Los seguros cubren tanto perros como gatos?',
+    a: 'Sí. Todos los planes que comparamos cubren tanto perros como gatos. Algunas aseguradoras ajustan el precio según la especie, el tamaño o la edad del animal, así que conviene cotizar con los datos reales de tu mascota.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
 ---
-<Layout title="Comparar Seguros para Mascotas">
-	<h1>Comparar Seguros para Mascotas</h1>
+
+<Layout
+  title="Comparar seguros de mascotas — México y Argentina | MiMascotaCubierta.com"
+  description="Comparamos todos los seguros de mascotas disponibles en Argentina y México. Precios reales, coberturas detalladas y opiniones verificadas."
+>
+  <!-- Hero -->
+  <section class="cmp-hero">
+    <div class="container">
+      <h1>Comparar seguros de mascotas</h1>
+      <p class="cmp-sub">
+        Analizamos cada seguro disponible en Argentina y México para que elijas con
+        información real.
+      </p>
+      <ul class="trust-badges">
+        <li>✓ Datos verificados</li>
+        <li>✓ Actualizado mensualmente</li>
+        <li>✓ Sin publicidad engañosa</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Comparador completo -->
+  <section class="cmp-section">
+    <div class="container">
+      <Comparador mode="full" />
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="container container-narrow">
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <details class="faq-item">
+            <summary>{f.q}</summary>
+            <div class="faq-answer"><p>{f.a}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 </Layout>
+
+<style>
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+  .container-narrow { max-width: 760px; }
+
+  /* Hero */
+  .cmp-hero {
+    background: #0f4c35;
+    color: #fff;
+    padding: 3.5rem 0 3rem;
+  }
+  .cmp-hero h1 {
+    color: #fff;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 0.85rem;
+  }
+  .cmp-sub {
+    color: rgba(255,255,255,0.85);
+    font-size: 1.1rem;
+    max-width: 620px;
+    margin-bottom: 1.5rem;
+  }
+  .trust-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .trust-badges li {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #6efac1;
+  }
+
+  /* Comparador */
+  .cmp-section { padding: 3rem 0; background: #fff; }
+
+  /* FAQ */
+  .faq-section { padding: 1rem 0 4.5rem; background: #fff; }
+  .faq-section h2 {
+    text-align: center;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    margin-bottom: 2rem;
+  }
+  .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .faq-item summary {
+    cursor: pointer;
+    padding: 1.1rem 1.25rem;
+    font-weight: 600;
+    font-size: 1rem;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    color: #1a1d23;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: '+';
+    font-size: 1.4rem;
+    color: #1a7d53;
+    font-weight: 400;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .faq-item[open] summary::after { transform: rotate(45deg); }
+  .faq-item[open] summary { color: #0f4c35; }
+  .faq-answer {
+    padding: 0 1.25rem 1.2rem;
+  }
+  .faq-answer p {
+    margin: 0;
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 768px) {
+    .cmp-section { padding: 2rem 0; }
+  }
+</style>

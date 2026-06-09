@@ -1,0 +1,119 @@
+{
+  "seguros": [
+    {
+      "id": "naranja-x-basico",
+      "nombre": "Naranja X",
+      "plan": "Plan Básico",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 11400,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": false,
+        "hospitalizacion": false,
+        "guarderia": true,
+        "extravio": true,
+        "responsabilidad_civil": false,
+        "vacunas": false
+      },
+      "destacado": false,
+      "popular": true,
+      "url_afiliado": "#",
+      "actualizado": "2026-06-08"
+    },
+    {
+      "id": "naranja-x-premium",
+      "nombre": "Naranja X",
+      "plan": "Plan Premium",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 14000,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": false,
+        "hospitalizacion": false,
+        "guarderia": true,
+        "extravio": true,
+        "responsabilidad_civil": false,
+        "vacunas": false
+      },
+      "destacado": false,
+      "popular": false,
+      "url_afiliado": "#",
+      "actualizado": "2026-06-08"
+    },
+    {
+      "id": "hipotecario-basico",
+      "nombre": "Banco Hipotecario",
+      "plan": "Plan Básico",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 12233,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": false,
+        "urgencias": false,
+        "cirugia": false,
+        "hospitalizacion": false,
+        "guarderia": false,
+        "extravio": true,
+        "responsabilidad_civil": true,
+        "vacunas": false
+      },
+      "destacado": false,
+      "popular": false,
+      "url_afiliado": "#",
+      "actualizado": "2026-06-08"
+    },
+    {
+      "id": "life-seguros-full",
+      "nombre": "Life Seguros",
+      "plan": "Plan Full",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 22168,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": false,
+        "urgencias": false,
+        "cirugia": false,
+        "hospitalizacion": false,
+        "guarderia": false,
+        "extravio": true,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": true,
+      "popular": false,
+      "url_afiliado": "#",
+      "actualizado": "2026-06-08"
+    },
+    {
+      "id": "life-seguros-senior",
+      "nombre": "Life Seguros",
+      "plan": "Plan Senior",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 20200,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": false,
+        "urgencias": false,
+        "cirugia": false,
+        "hospitalizacion": false,
+        "guarderia": false,
+        "extravio": true,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": false,
+      "popular": false,
+      "url_afiliado": "#",
+      "actualizado": "2026-06-08"
+    }
+  ]
+}

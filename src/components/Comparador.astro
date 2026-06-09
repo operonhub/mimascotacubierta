@@ -1,0 +1,367 @@
+---
+import segurosData from '../data/seguros.json';
+
+interface Props {
+  mode?: 'preview' | 'full';
+}
+const { mode = 'full' } = Astro.props;
+
+type Seguro = (typeof segurosData.seguros)[number];
+
+// Score derivado: cantidad de coberturas incluidas (proxy honesto de "puntuación")
+const withScore = segurosData.seguros.map((s) => ({
+  ...s,
+  score: Object.values(s.coberturas).filter(Boolean).length,
+}));
+
+// preview = los 3 AR más baratos; full = todos
+const rows =
+  mode === 'preview'
+    ? withScore
+        .filter((s) => s.pais === 'AR')
+        .sort((a, b) => a.precio_mensual - b.precio_mensual)
+        .slice(0, 3)
+    : withScore.slice().sort((a, b) => a.precio_mensual - b.precio_mensual);
+
+// Fecha de última actualización (la más reciente del set)
+const lastUpdatedISO = segurosData.seguros.reduce(
+  (max, s) => (s.actualizado > max ? s.actualizado : max),
+  '',
+);
+const fmtDate = (iso: string) => {
+  const [y, m, d] = iso.split('-').map(Number);
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  return `${d} de ${meses[m - 1]} de ${y}`;
+};
+
+const fmtPrice = (n: number) => n.toLocaleString('es-AR');
+
+// Columnas de cobertura mostradas en la tabla
+const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
+  { key: 'consultas', label: 'Consultas' },
+  { key: 'urgencias', label: 'Urgencias' },
+  { key: 'extravio', label: 'Extravío' },
+  { key: 'responsabilidad_civil', label: 'R. Civil' },
+  { key: 'vacunas', label: 'Vacunas' },
+];
+---
+
+<div class={`comparador ${mode === 'full' ? 'is-full' : 'is-preview'}`} data-mode={mode}>
+
+  {mode === 'full' && (
+    <div class="filtros" role="group" aria-label="Filtros de comparación">
+      <label class="filtro">
+        <span>País</span>
+        <select data-filtro="pais">
+          <option value="todos">Todos</option>
+          <option value="AR">🇦🇷 Argentina</option>
+          <option value="MX">🇲🇽 México</option>
+        </select>
+      </label>
+      <label class="filtro">
+        <span>Tipo</span>
+        <select data-filtro="tipo">
+          <option value="todos">Todos</option>
+          <option value="perros">Perros</option>
+          <option value="gatos">Gatos</option>
+        </select>
+      </label>
+      <label class="filtro">
+        <span>Ordenar</span>
+        <select data-filtro="orden">
+          <option value="precio">Precio (menor a mayor)</option>
+          <option value="score">Puntuación</option>
+        </select>
+      </label>
+    </div>
+  )}
+
+  <!-- Estado MX: próximamente -->
+  <div class="mx-soon" data-mx-soon hidden>
+    <span class="mx-flag" aria-hidden="true">🇲🇽</span>
+    <h3>Próximamente</h3>
+    <p>Estamos relevando los mejores seguros para México. Volvé pronto.</p>
+  </div>
+
+  <div class="table-wrap" data-table-wrap>
+    <table>
+      <thead>
+        <tr>
+          <th class="col-sticky-left">Aseguradora</th>
+          <th>Precio/mes</th>
+          {cobCols.map((c) => <th class="col-center">{c.label}</th>)}
+          <th class="col-sticky-right">Ver oferta</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((s) => (
+          <tr
+            data-pais={s.pais}
+            data-tipo={s.tipo.join(',')}
+            data-precio={s.precio_mensual}
+            data-score={s.score}
+          >
+            <td class="col-sticky-left td-name">
+              <div class="aseg">
+                <span class="aseg-nombre">{s.nombre}</span>
+                <span class="aseg-plan">{s.plan}</span>
+                <span class="badges">
+                  {s.popular && <span class="badge badge-popular">Más popular</span>}
+                  {s.destacado && <span class="badge badge-reco">Recomendado</span>}
+                </span>
+              </div>
+            </td>
+            <td class="td-precio">
+              <strong>${fmtPrice(s.precio_mensual)}</strong>
+              <span class="moneda">{s.moneda}/mes</span>
+            </td>
+            {cobCols.map((c) => (
+              <td class="col-center">
+                {s.coberturas[c.key] ? (
+                  <span class="ico-yes" aria-label="Incluido">✓</span>
+                ) : (
+                  <span class="ico-no" aria-label="No incluido">✗</span>
+                )}
+              </td>
+            ))}
+            <td class="col-sticky-right">
+              <a href={s.url_afiliado} class="btn-oferta" rel="nofollow sponsored">Ver oferta</a>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="table-note" data-table-note>
+    Precios en ARS. Última actualización: {fmtDate(lastUpdatedISO)}
+  </p>
+
+</div>
+
+{mode === 'full' && (
+  <script>
+    const root = document.querySelector('.comparador[data-mode="full"]');
+    if (root) {
+      const paisSel = root.querySelector('[data-filtro="pais"]') as HTMLSelectElement | null;
+      const tipoSel = root.querySelector('[data-filtro="tipo"]') as HTMLSelectElement | null;
+      const ordenSel = root.querySelector('[data-filtro="orden"]') as HTMLSelectElement | null;
+      const tbody = root.querySelector('tbody') as HTMLTableSectionElement | null;
+      const tableWrap = root.querySelector('[data-table-wrap]') as HTMLElement | null;
+      const tableNote = root.querySelector('[data-table-note]') as HTMLElement | null;
+      const mxSoon = root.querySelector('[data-mx-soon]') as HTMLElement | null;
+
+      if (paisSel && tipoSel && ordenSel && tbody && tableWrap && tableNote && mxSoon) {
+        const apply = () => {
+          const pais = paisSel.value;
+          const tipo = tipoSel.value;
+          const orden = ordenSel.value;
+
+          // México todavía sin datos → mostrar "Próximamente"
+          if (pais === 'MX') {
+            tableWrap.hidden = true;
+            tableNote.hidden = true;
+            mxSoon.hidden = false;
+            return;
+          }
+          tableWrap.hidden = false;
+          tableNote.hidden = false;
+          mxSoon.hidden = true;
+
+          const trs = Array.from(tbody.querySelectorAll<HTMLTableRowElement>('tr[data-pais]'));
+
+          // Ordenar reubicando nodos
+          trs.sort((a, b) => {
+            if (orden === 'score') {
+              return Number(b.dataset.score) - Number(a.dataset.score);
+            }
+            return Number(a.dataset.precio) - Number(b.dataset.precio);
+          });
+          trs.forEach((tr) => tbody.appendChild(tr));
+
+          // Filtrar
+          trs.forEach((tr) => {
+            const okPais = pais === 'todos' || tr.dataset.pais === pais;
+            const okTipo =
+              tipo === 'todos' || (tr.dataset.tipo || '').split(',').includes(tipo);
+            tr.classList.toggle('row-hidden', !(okPais && okTipo));
+          });
+        };
+
+        // Geotargeting: zona horaria → país por defecto
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        if (tz.includes('Argentina')) paisSel.value = 'AR';
+        else if (tz.includes('Mexico')) paisSel.value = 'MX';
+        else paisSel.value = 'todos';
+
+        paisSel.addEventListener('change', apply);
+        tipoSel.addEventListener('change', apply);
+        ordenSel.addEventListener('change', apply);
+        apply();
+      }
+    }
+  </script>
+)}
+
+<style>
+  .comparador { width: 100%; }
+
+  /* ── Filtros ───────────────────────────── */
+  .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .filtro {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1 1 180px;
+  }
+  .filtro span {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #64748b;
+  }
+  .filtro select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0.6rem 2rem 0.6rem 0.85rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2364748b' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")
+      no-repeat right 0.85rem center;
+    font-size: 0.92rem;
+    color: #1a1d23;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .filtro select:focus {
+    outline: none;
+    border-color: #1a7d53;
+    box-shadow: 0 0 0 3px rgba(26,125,83,0.15);
+  }
+
+  /* ── Tabla ─────────────────────────────── */
+  .table-wrap {
+    position: relative;
+    overflow-x: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.92rem;
+    min-width: 720px;
+  }
+  thead { background: #f8fafc; }
+  th {
+    padding: 0.85rem 1.1rem;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #64748b;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+  }
+  td {
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: #1a1d23;
+    vertical-align: middle;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: #f6fdf9; }
+  .col-center { text-align: center; }
+
+  .row-hidden { display: none; }
+
+  /* Aseguradora + plan + badges */
+  .aseg { display: flex; flex-direction: column; gap: 0.15rem; }
+  .aseg-nombre { font-weight: 700; font-size: 0.98rem; }
+  .aseg-plan { font-size: 0.82rem; color: #64748b; }
+  .badges { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.35rem; }
+  .badge {
+    font-size: 0.66rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .badge-popular { background: #1a7d53; color: #fff; }
+  .badge-reco { background: #6efac1; color: #0f4c35; }
+
+  /* Precio */
+  .td-precio strong { font-size: 1.02rem; display: block; line-height: 1.2; }
+  .moneda { font-size: 0.72rem; color: #94a3b8; }
+
+  /* Iconos cobertura */
+  .ico-yes { color: #16a34a; font-weight: 800; font-size: 1.05rem; }
+  .ico-no { color: #dc2626; font-weight: 800; font-size: 1.05rem; }
+
+  /* Botón oferta */
+  .btn-oferta {
+    display: inline-block;
+    padding: 0.5rem 1.1rem;
+    background: #0f4c35;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .btn-oferta:hover { background: #1a7d53; text-decoration: none; }
+
+  .table-note {
+    margin-top: 0.9rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+
+  /* ── MX próximamente ───────────────────── */
+  .mx-soon {
+    text-align: center;
+    padding: 3.5rem 1.5rem;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    background: #f8fafc;
+  }
+  .mx-flag { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+  .mx-soon h3 { font-size: 1.2rem; margin-bottom: 0.4rem; color: #0f4c35; }
+  .mx-soon p { color: #64748b; font-size: 0.95rem; max-width: 420px; margin: 0 auto; }
+
+  /* ── Sticky columns en mobile ──────────── */
+  @media (max-width: 760px) {
+    .col-sticky-left {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background: #fff;
+      box-shadow: 2px 0 6px rgba(0,0,0,0.04);
+    }
+    thead .col-sticky-left { background: #f8fafc; }
+    .col-sticky-right {
+      position: sticky;
+      right: 0;
+      z-index: 2;
+      background: #fff;
+      box-shadow: -2px 0 6px rgba(0,0,0,0.04);
+    }
+    thead .col-sticky-right { background: #f8fafc; }
+    tbody tr:hover .col-sticky-left,
+    tbody tr:hover .col-sticky-right { background: #f6fdf9; }
+  }
+</style>
