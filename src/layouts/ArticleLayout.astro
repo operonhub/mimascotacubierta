@@ -52,6 +52,27 @@ const topSeguros = [...segurosData.seguros]
   .sort((a, b) => a.precio_mensual - b.precio_mensual)
   .slice(0, 3);
 
+// Schema Article (siempre presente)
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description: description,
+  author: {
+    '@type': 'Organization',
+    name: author,
+    url: 'https://mimascotacubierta.com',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'MiMascotaCubierta.com',
+    url: 'https://mimascotacubierta.com',
+  },
+  datePublished: d.toISOString(),
+  dateModified: d.toISOString(),
+  url: `https://mimascotacubierta.com${Astro.url.pathname}`,
+};
+
 // Schema FAQPage (solo si hay preguntas)
 const faqSchema =
   faq.length > 0
@@ -92,6 +113,11 @@ const relatedBottom = [
 ---
 
 <Layout title={title} description={description}>
+  <script
+    type="application/ld+json"
+    slot="head"
+    set:html={JSON.stringify(articleSchema)}
+  />
   {faqSchema && (
     <script
       type="application/ld+json"
