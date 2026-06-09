@@ -1,0 +1,136 @@
+---
+// Footer
+---
+
+<footer>
+  <div class="footer-inner">
+
+    <!-- Columna 1: Marca -->
+    <div class="col col-brand">
+      <div class="footer-logo">
+        <img
+          src="/logpng1.png"
+          alt="MiMascotaSegura"
+          height="36"
+          class="logo-white"
+        />
+        <span class="footer-logo-text">MiMascotaSegura<span class="footer-tld">.com</span></span>
+      </div>
+      <p class="tagline">Seguros y salud para mascotas</p>
+      <p class="copy">© 2026 MiMascotaSegura.com · Operon</p>
+    </div>
+
+    <!-- Columna 2: Categorías -->
+    <div class="col">
+      <h4>Categorías</h4>
+      <ul>
+        <li><a href="/comparar">Comparar seguros</a></li>
+        <li><a href="/seguros-mascotas">Seguros de mascotas</a></li>
+        <li><a href="/gastos-veterinarios">Gastos veterinarios</a></li>
+        <li><a href="/salud-enfermedades">Salud y enfermedades</a></li>
+        <li><a href="/razas">Razas</a></li>
+        <li><a href="/urgencias">Urgencias</a></li>
+        <li><a href="/nutricion-cuidados">Nutrición y cuidados</a></li>
+        <li><a href="/viajes-mascotas">Viajes con mascotas</a></li>
+      </ul>
+    </div>
+
+    <!-- Columna 3: Legal -->
+    <div class="col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="/sobre-nosotros">Sobre nosotros</a></li>
+        <li><a href="/contacto">Contacto</a></li>
+        <li><a href="/privacidad">Privacidad</a></li>
+        <li><a href="/aviso-legal">Aviso legal</a></li>
+        <li><a href="/cookies">Cookies</a></li>
+      </ul>
+    </div>
+
+  </div>
+</footer>
+
+<style>
+  footer {
+    background: #0f4c35;
+    color: rgba(255,255,255,0.8);
+    border-top: 2px solid #1a7d53;
+    padding: 3.5rem 1.5rem 2.5rem;
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    gap: 3rem;
+  }
+
+  /* Marca */
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  .logo-white {
+    height: 36px;
+    width: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+  }
+  .footer-logo-text {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+  }
+  .footer-tld { color: #6efac1; }
+  .tagline {
+    color: rgba(255,255,255,0.65);
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+  }
+  .copy {
+    color: rgba(255,255,255,0.38);
+    font-size: 0.78rem;
+  }
+
+  /* Columnas nav */
+  h4 {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+  ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  a {
+    color: rgba(255,255,255,0.65);
+    font-size: 0.88rem;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  a:hover {
+    color: #6efac1;
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    .footer-inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .col-brand {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 480px) {
+    .footer-inner { grid-template-columns: 1fr; }
+  }
+</style>
