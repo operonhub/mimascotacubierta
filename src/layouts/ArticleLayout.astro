@@ -1,0 +1,597 @@
+---
+import Layout from './Layout.astro';
+import segurosData from '../data/seguros.json';
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  category: string;
+  categorySlug: string;
+  pubDate: Date;
+  author?: string;
+  image?: string;
+  imageAlt?: string;
+  readingTime?: number;
+  tags?: string[];
+  faq?: FaqItem[];
+}
+
+const {
+  title,
+  description,
+  category,
+  categorySlug,
+  pubDate,
+  author = 'Equipo MiMascotaCubierta',
+  image,
+  imageAlt,
+  readingTime = 1,
+  faq = [],
+} = Astro.props;
+
+// Fecha en formato DD/MM/YYYY (UTC para no correr el día por zona horaria)
+const d = pubDate instanceof Date ? pubDate : new Date(pubDate);
+const fmtDate = `${String(d.getUTCDate()).padStart(2, '0')}/${String(
+  d.getUTCMonth() + 1,
+).padStart(2, '0')}/${d.getUTCFullYear()}`;
+
+// Título recortado a 40 caracteres para el breadcrumb
+const crumbTitle = title.length > 40 ? `${title.slice(0, 40).trimEnd()}…` : title;
+
+// Marca de la casa para el avatar (MiMascotaCubierta)
+const initials = 'MC';
+
+// Mini comparador: 3 seguros más baratos
+const fmtPrice = (n: number) => n.toLocaleString('es-AR');
+const topSeguros = [...segurosData.seguros]
+  .sort((a, b) => a.precio_mensual - b.precio_mensual)
+  .slice(0, 3);
+
+// Schema FAQPage (solo si hay preguntas)
+const faqSchema =
+  faq.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faq.map((f) => ({
+          '@type': 'Question',
+          name: f.question,
+          acceptedAnswer: { '@type': 'Answer', text: f.answer },
+        })),
+      }
+    : null;
+
+const relatedSidebar = [
+  { label: '¿Cuánto cuesta una consulta veterinaria?', href: '/gastos-veterinarios' },
+  { label: 'Los mejores seguros para perros en Argentina', href: '/seguros-mascotas' },
+  { label: 'Enfermedades frecuentes en perros adultos', href: '/salud-enfermedades' },
+];
+
+const relatedBottom = [
+  {
+    cat: 'Gastos veterinarios',
+    title: '¿Cuánto cuesta una consulta veterinaria en 2026?',
+    href: '/gastos-veterinarios',
+  },
+  {
+    cat: 'Seguros',
+    title: 'Los 5 mejores seguros para perros en Argentina',
+    href: '/seguros-mascotas',
+  },
+  {
+    cat: 'Salud',
+    title: 'Enfermedades más comunes en perros adultos',
+    href: '/salud-enfermedades',
+  },
+];
+---
+
+<Layout title={title} description={description}>
+  {faqSchema && (
+    <script
+      type="application/ld+json"
+      slot="head"
+      set:html={JSON.stringify(faqSchema)}
+    />
+  )}
+
+  <div class="article-wrap">
+    <div class="article-grid">
+      <!-- ─── CONTENIDO PRINCIPAL ─────────────────────── -->
+      <main class="article-main">
+        <!-- A) Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Migas de pan">
+          <a href="/">Home</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href={`/${categorySlug}/`}>{category}</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <span class="crumb-current">{crumbTitle}</span>
+        </nav>
+
+        <!-- B) Header -->
+        <header class="article-header">
+          <div class="meta-row">
+            <a class="cat-chip" href={`/${categorySlug}/`}>{category}</a>
+            <span class="reading-time">{readingTime} min de lectura</span>
+          </div>
+          <h1>{title}</h1>
+          <p class="pub-date">Actualizado: {fmtDate}</p>
+          <div class="author-row">
+            <span class="avatar" aria-hidden="true">{initials}</span>
+            <span class="author-name">Por {author}</span>
+            <span class="verified">Información verificada ✓</span>
+          </div>
+        </header>
+
+        <!-- C) Hero image -->
+        {image && (
+          <img class="hero-img" src={image} alt={imageAlt ?? title} width="800" height="450" />
+        )}
+
+        <!-- D) Cuerpo del artículo -->
+        <div class="prose">
+          <slot />
+        </div>
+
+        <!-- E) FAQ -->
+        {faq.length > 0 && (
+          <section class="faq" aria-label="Preguntas frecuentes">
+            <h2>Preguntas frecuentes</h2>
+            <div class="faq-list">
+              {faq.map((f, i) => (
+                <div class="faq-item">
+                  <button
+                    class="faq-q"
+                    aria-expanded="false"
+                    aria-controls={`faq-panel-${i}`}
+                    id={`faq-btn-${i}`}
+                  >
+                    <span>{f.question}</span>
+                    <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+                  <div class="faq-a" id={`faq-panel-${i}`} role="region" aria-labelledby={`faq-btn-${i}`}>
+                    <p>{f.answer}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <!-- F) CTA -->
+        <aside class="cta-block">
+          <h2>¿Tu mascota está protegida?</h2>
+          <p>
+            Comparamos todos los seguros disponibles en Argentina y México para que
+            elijas con información real.
+          </p>
+          <a class="cta-btn" href="/comparar">Comparar seguros ahora →</a>
+        </aside>
+      </main>
+
+      <!-- ─── SIDEBAR ─────────────────────────────────── -->
+      <aside class="sidebar">
+        <!-- Bloque 1: mini comparador -->
+        <div class="side-card">
+          <h3 class="side-title">Seguros destacados</h3>
+          <ul class="mini-list">
+            {topSeguros.map((s) => (
+              <li class="mini-row">
+                <div class="mini-info">
+                  <span class="mini-name">{s.nombre}</span>
+                  <span class="mini-plan">{s.plan}</span>
+                </div>
+                <span class="mini-price">${fmtPrice(s.precio_mensual)}</span>
+                <a class="mini-btn" href={s.url_afiliado} rel="nofollow sponsored">Ver</a>
+              </li>
+            ))}
+          </ul>
+          <a class="side-link" href="/comparar">Ver comparativa completa →</a>
+        </div>
+
+        <!-- Bloque 2: artículos relacionados -->
+        <div class="side-card">
+          <h3 class="side-title">También te puede interesar</h3>
+          <ul class="rel-list">
+            {relatedSidebar.map((r) => (
+              <li>
+                <a href={r.href}><span class="arrow" aria-hidden="true">›</span>{r.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Bloque 3: trust badge -->
+        <div class="trust-badge">
+          <span>✓ Información verificada</span>
+          <span>✓ Datos actualizados Jun 2026</span>
+          <span>✓ Sin publicidad engañosa</span>
+        </div>
+      </aside>
+    </div>
+
+    <!-- ─── SEGUÍ LEYENDO ─────────────────────────────── -->
+    <section class="segui-leyendo">
+      <h2>Seguí leyendo</h2>
+      <div class="rel-grid">
+        {relatedBottom.map((r) => (
+          <a class="rel-card" href={r.href}>
+            <div class="rel-img" aria-hidden="true"></div>
+            <div class="rel-body">
+              <span class="rel-cat">{r.cat}</span>
+              <h3>{r.title}</h3>
+              <span class="rel-readmore">Leer artículo →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  // Acordeón FAQ (vanilla JS, sin frameworks)
+  document.querySelectorAll<HTMLButtonElement>('.faq-q').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      if (!item) return;
+      const isOpen = item.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
+</script>
+
+<style>
+  .article-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* Grid: una columna en mobile, dos en desktop */
+  .article-grid { display: block; }
+
+  @media (min-width: 1024px) {
+    .article-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 3rem;
+      align-items: start;
+    }
+    .sidebar { position: sticky; top: 80px; }
+  }
+
+  /* ── A) Breadcrumb ─────────────────────── */
+  .breadcrumb {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .breadcrumb a { color: #64748b; text-decoration: none; }
+  .breadcrumb a:hover { color: #1a7d53; text-decoration: underline; }
+  .breadcrumb .sep { color: #cbd5e1; }
+  .crumb-current { color: #94a3b8; }
+
+  /* ── B) Header ─────────────────────────── */
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 0.85rem;
+  }
+  .cat-chip {
+    display: inline-block;
+    background: #f0fdf4;
+    color: #0f4c35;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    text-decoration: none;
+  }
+  .cat-chip:hover { background: #dcfce7; text-decoration: none; }
+  .reading-time { font-size: 0.82rem; color: #94a3b8; }
+
+  .article-header h1 {
+    color: #0f4c35;
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    line-height: 1.15;
+    margin-bottom: 0.65rem;
+  }
+  .pub-date { font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.1rem; }
+
+  .author-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 2rem;
+  }
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #0f4c35;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .author-name { font-size: 0.88rem; color: #374151; font-weight: 600; }
+  .verified {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #16a34a;
+    background: #f0fdf4;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+  }
+
+  /* ── C) Hero image ─────────────────────── */
+  .hero-img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+  }
+
+  /* ── D) Prose (contenido markdown) ─────── */
+  .prose :global(h2) {
+    color: #0f4c35;
+    font-size: 1.4rem;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    border-left: 3px solid #6efac1;
+    padding-left: 0.75rem;
+  }
+  .prose :global(h3) {
+    color: #1a7d53;
+    font-size: 1.15rem;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .prose :global(p) {
+    color: #374151;
+    line-height: 1.85;
+    margin-bottom: 1.25rem;
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-left: 1.5rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.85;
+  }
+  .prose :global(li) { margin-bottom: 0.4rem; color: #374151; }
+  .prose :global(strong) { color: #1a1d23; }
+  .prose :global(a) { color: #1a7d53; text-decoration: none; }
+  .prose :global(a:hover) { text-decoration: underline; }
+  .prose :global(blockquote) {
+    border-left: 4px solid #6efac1;
+    background: #f0fdf4;
+    padding: 1rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1.5rem 0;
+    color: #374151;
+  }
+  .prose :global(blockquote p) { margin: 0; }
+
+  /* Tablas dentro del markdown */
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.92rem;
+  }
+  .prose :global(th),
+  .prose :global(td) {
+    border: 1px solid #e2e8f0;
+    padding: 0.7rem 0.9rem;
+    text-align: left;
+  }
+  .prose :global(thead) { background: #f8fafc; }
+  .prose :global(th) { color: #0f4c35; font-weight: 700; }
+  .prose :global(tbody tr:nth-child(even)) { background: #f8fafc; }
+
+  /* ── E) FAQ ────────────────────────────── */
+  .faq { margin-top: 3rem; }
+  .faq > h2 {
+    color: #0f4c35;
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+  }
+  .faq-list { display: flex; flex-direction: column; }
+  .faq-item { border-bottom: 1px solid #e2e8f0; }
+  .faq-item:first-child { border-top: 1px solid #e2e8f0; }
+  .faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    padding: 1.1rem 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1d23;
+    font-family: inherit;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .faq-q .chevron {
+    color: #1a7d53;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  .faq-item.open .faq-q { color: #0f4c35; }
+  .faq-item.open .chevron { transform: rotate(180deg); }
+  .faq-a {
+    display: none;
+    padding: 0 0.25rem 1.1rem;
+  }
+  .faq-item.open .faq-a { display: block; }
+  .faq-a p { margin: 0; color: #475569; line-height: 1.75; font-size: 0.95rem; }
+
+  /* ── F) CTA ────────────────────────────── */
+  .cta-block {
+    background: #0f4c35;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 3rem;
+    color: #fff;
+  }
+  .cta-block h2 { color: #fff; font-size: 1.35rem; margin-bottom: 0.6rem; }
+  .cta-block p {
+    color: rgba(255,255,255,0.85);
+    line-height: 1.7;
+    margin-bottom: 1.4rem;
+    font-size: 0.98rem;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: #6efac1;
+    color: #0f4c35;
+    font-weight: 700;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .cta-btn:hover { opacity: 0.9; transform: translateY(-2px); text-decoration: none; }
+
+  /* ── Sidebar ───────────────────────────── */
+  .sidebar {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  @media (min-width: 1024px) { .sidebar { margin-top: 0; } }
+
+  .side-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.25rem;
+  }
+  .side-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #64748b;
+    margin-bottom: 1rem;
+  }
+  .mini-list { list-style: none; padding: 0; margin: 0 0 1rem; }
+  .mini-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .mini-row:first-child { padding-top: 0; }
+  .mini-info { display: flex; flex-direction: column; min-width: 0; }
+  .mini-name { font-size: 0.86rem; font-weight: 700; color: #1a1d23; }
+  .mini-plan { font-size: 0.74rem; color: #94a3b8; }
+  .mini-price { font-size: 0.86rem; font-weight: 700; color: #0f4c35; white-space: nowrap; }
+  .mini-btn {
+    background: #0f4c35;
+    color: #fff;
+    font-size: 0.74rem;
+    font-weight: 700;
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+    text-decoration: none;
+  }
+  .mini-btn:hover { background: #1a7d53; text-decoration: none; }
+  .side-link { font-size: 0.85rem; font-weight: 600; color: #1a7d53; text-decoration: none; }
+  .side-link:hover { text-decoration: underline; }
+
+  .rel-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+  .rel-list a {
+    font-size: 0.9rem;
+    color: #374151;
+    text-decoration: none;
+    display: flex;
+    gap: 0.45rem;
+    line-height: 1.4;
+  }
+  .rel-list a:hover { color: #1a7d53; }
+  .rel-list .arrow { color: #1a7d53; font-weight: 700; flex-shrink: 0; }
+
+  .trust-badge {
+    background: #f0fdf4;
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    color: #0f4c35;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  /* ── Seguí leyendo ─────────────────────── */
+  .segui-leyendo { margin-top: 4rem; }
+  .segui-leyendo > h2 {
+    color: #0f4c35;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .rel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .rel-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .rel-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); transform: translateY(-2px); text-decoration: none; }
+  .rel-img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  }
+  .rel-body { padding: 1.1rem 1.1rem 1.35rem; }
+  .rel-cat {
+    display: inline-block;
+    background: #f0fdf4;
+    color: #0f4c35;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.18rem 0.55rem;
+    border-radius: 4px;
+    margin-bottom: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .rel-body h3 { font-size: 0.96rem; line-height: 1.45; color: #1a1d23; margin-bottom: 0.7rem; }
+  .rel-readmore { font-size: 0.85rem; font-weight: 600; color: #1a7d53; }
+</style>
