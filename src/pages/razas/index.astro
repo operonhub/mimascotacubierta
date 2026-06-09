@@ -1,6 +1,202 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { categorias } from '../../data/categorias';
+
+const cat = categorias.find((c) => c.slug === 'razas')!;
+
+const subcats = [
+  {
+    emoji: '🐕',
+    titulo: 'Razas de Perros',
+    descripcion:
+      'Guías por raza: salud, temperamento, cuidados y gastos anuales promedio.',
+    href: '/razas/perros',
+  },
+  {
+    emoji: '🐈',
+    titulo: 'Razas de Gatos',
+    descripcion:
+      'Todo sobre cada raza de gato: carácter, enfermedades frecuentes y costos.',
+    href: '/razas/gatos',
+  },
+];
 ---
-<Layout title="Razas de Mascotas">
-	<h1>Razas de Mascotas</h1>
+
+<Layout
+  title={`${cat.nombre} — Guías y comparativas | MiMascotaCubierta.com`}
+  description={cat.descripcion}
+>
+  <!-- ─── HERO ────────────────────────────────────────── -->
+  <section class="cat-hero" style={`background:${cat.color}`}>
+    <div class="container">
+      <span class="cat-emoji" aria-hidden="true">{cat.emoji}</span>
+      <h1>{cat.nombre}</h1>
+      <p class="cat-desc">{cat.descripcion}</p>
+      <div class="cat-stats">
+        {cat.stats.map((s) => (
+          <div class="stat-box">
+            <span class="stat-valor">{s.valor}</span>
+            <span class="stat-label">{s.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── INTRO ───────────────────────────────────────── -->
+  <section class="cat-intro">
+    <div class="container container-narrow">
+      <nav class="breadcrumb" aria-label="Migas de pan">
+        <a href="/">Home</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <span class="crumb-current">{cat.nombre}</span>
+      </nav>
+      <p class="intro-text">{cat.intro}</p>
+    </div>
+  </section>
+
+  <!-- ─── SUBCATEGORÍAS ───────────────────────────────── -->
+  <section class="subcats">
+    <div class="container">
+      <div class="subcat-grid">
+        {subcats.map((s) => (
+          <a class="subcat-card" href={s.href}>
+            <span class="subcat-emoji" aria-hidden="true">{s.emoji}</span>
+            <h2>{s.titulo}</h2>
+            <p>{s.descripcion}</p>
+            <span class="subcat-link">Ver razas →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA ─────────────────────────────────────────── -->
+  <section class="cat-cta">
+    <div class="container">
+      <div class="cta-card">
+        <h2>¿Querés proteger a tu mascota?</h2>
+        <p>Comparamos todos los seguros disponibles en Argentina y México.</p>
+        <a class="cta-btn" href="/comparar">Comparar seguros ahora →</a>
+      </div>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+  .container-narrow { max-width: 800px; }
+
+  /* ── Hero ────────────────────────────────── */
+  .cat-hero { color: #fff; padding: 3rem 0; text-align: center; }
+  .cat-emoji { font-size: 64px; line-height: 1; display: block; margin-bottom: 1rem; }
+  .cat-hero h1 {
+    color: #fff;
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    margin-bottom: 0.85rem;
+  }
+  .cat-desc {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.15rem;
+    line-height: 1.6;
+    max-width: 720px;
+    margin: 0 auto 2rem;
+  }
+  .cat-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+  .stat-box {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    min-width: 130px;
+  }
+  .stat-valor { display: block; font-size: 1.6rem; font-weight: 800; line-height: 1.1; }
+  .stat-label {
+    display: block;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 0.25rem;
+  }
+
+  /* ── Intro ───────────────────────────────── */
+  .cat-intro { padding: 2.5rem 0 0; background: #fff; }
+  .breadcrumb {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .breadcrumb a { color: #64748b; text-decoration: none; }
+  .breadcrumb a:hover { color: #1a7d53; text-decoration: underline; }
+  .breadcrumb .sep { color: #cbd5e1; }
+  .crumb-current { color: #94a3b8; }
+  .intro-text { color: #374151; font-size: 1.02rem; line-height: 1.85; }
+
+  /* ── Subcategorías ───────────────────────── */
+  .subcats { padding: 3rem 0; background: #fff; }
+  .subcat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .subcat-card {
+    display: block;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-top: 4px solid #1a7d53;
+    border-radius: 12px;
+    padding: 2rem 1.75rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .subcat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+  }
+  .subcat-emoji { font-size: 3rem; display: block; margin-bottom: 0.75rem; line-height: 1; }
+  .subcat-card h2 { font-size: 1.3rem; color: #0f4c35; margin-bottom: 0.5rem; }
+  .subcat-card p {
+    color: #64748b;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  .subcat-link { font-size: 0.9rem; font-weight: 700; color: #1a7d53; }
+
+  /* ── CTA ─────────────────────────────────── */
+  .cat-cta { padding: 0 0 4rem; background: #fff; }
+  .cta-card {
+    background: #0f4c35;
+    border-radius: 12px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    color: #fff;
+  }
+  .cta-card h2 { color: #fff; font-size: 1.5rem; margin-bottom: 0.6rem; }
+  .cta-card p {
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: #6efac1;
+    color: #0f4c35;
+    font-weight: 700;
+    padding: 0.85rem 1.6rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .cta-btn:hover { opacity: 0.9; transform: translateY(-2px); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    .cat-hero { padding: 2.5rem 0; }
+    .subcats { padding: 2.5rem 0; }
+  }
+</style>
