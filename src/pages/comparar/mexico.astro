@@ -1,6 +1,235 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+
+const faqs = [
+  {
+    q: '¿Existen seguros de mascotas en México?',
+    a: 'Sí, aunque el mercado es más reciente que en Argentina o España. Algunas aseguradoras como GNP y MAPFRE ofrecen coberturas para mascotas. Estamos relevando los datos para traerte una comparativa completa.',
+  },
+  {
+    q: '¿Cuándo van a tener la comparativa de México?',
+    a: 'Estamos trabajando en ello. Dejá tu email y te avisamos cuando esté listo.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
 ---
-<Layout title="Seguros para Mascotas en México">
-	<h1>Seguros para Mascotas en México</h1>
+
+<Layout
+  title="Seguros de mascotas en México (2026) — Comparativa completa | MiMascotaCubierta.com"
+  description="Comparamos los mejores seguros de mascotas disponibles en México. Precios en MXN, coberturas detalladas y guías de contratación."
+>
+  <!-- ─── A) HERO ─────────────────────────────────────── -->
+  <section class="cmp-hero">
+    <div class="container">
+      <h1>Seguros de mascotas en México</h1>
+      <p class="cmp-sub">
+        Próximamente: estamos relevando los mejores planes disponibles en México.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── B) COMING SOON ──────────────────────────────── -->
+  <section class="soon-section">
+    <div class="container container-narrow">
+      <div class="soon-card">
+        <span class="soon-flag" aria-hidden="true">🇲🇽</span>
+        <h2>Estamos trabajando en esto</h2>
+        <p>
+          Estamos relevando los mejores seguros de mascotas disponibles en México
+          para traerte comparativas reales con precios actualizados en MXN.
+          Volvé pronto o dejanos tu email para avisarte cuando esté listo.
+        </p>
+        <form class="notify-form" action="mailto:admin@operonhub.com" method="POST" enctype="text/plain">
+          <input
+            type="email"
+            name="email"
+            placeholder="tu@email.com"
+            aria-label="Tu email"
+            required
+          />
+          <button type="submit">Avisame cuando esté listo</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── C) INFO ─────────────────────────────────────── -->
+  <section class="info">
+    <div class="container">
+      <div class="info-grid">
+        <div class="info-col">
+          <span class="info-icon" aria-hidden="true">🐾</span>
+          <h3>Mercado emergente</h3>
+          <p>México tiene más de 20 millones de mascotas y el mercado de seguros está creciendo rápidamente.</p>
+        </div>
+        <div class="info-col">
+          <span class="info-icon" aria-hidden="true">💵</span>
+          <h3>Precios en MXN</h3>
+          <p>Cuando lancemos, todos los precios estarán en pesos mexicanos con actualización mensual.</p>
+        </div>
+        <div class="info-col">
+          <span class="info-icon" aria-hidden="true">🇲🇽</span>
+          <h3>Cobertura nacional</h3>
+          <p>Cubriremos seguros con presencia en las principales ciudades de México.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── D) FAQ ──────────────────────────────────────── -->
+  <section class="faq-section">
+    <div class="container container-narrow">
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <details class="faq-item">
+            <summary>{f.q}</summary>
+            <div class="faq-answer"><p>{f.a}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 </Layout>
+
+<style>
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+  .container-narrow { max-width: 760px; }
+
+  /* A) Hero */
+  .cmp-hero { background: #0f4c35; color: #fff; padding: 3.5rem 0 3rem; }
+  .cmp-hero h1 {
+    color: #fff;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 0.85rem;
+  }
+  .cmp-sub {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.1rem;
+    max-width: 620px;
+    margin: 0;
+  }
+
+  /* B) Coming soon */
+  .soon-section { padding: 3rem 0; background: #fff; }
+  .soon-card {
+    text-align: center;
+    padding: 3rem 1.75rem;
+    border: 1px dashed #cbd5e1;
+    border-radius: 16px;
+    background: #f8fafc;
+  }
+  .soon-flag { font-size: 4rem; display: block; margin-bottom: 1rem; line-height: 1; }
+  .soon-card h2 { font-size: 1.5rem; color: #0f4c35; margin-bottom: 0.75rem; }
+  .soon-card p {
+    color: #475569;
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 540px;
+    margin: 0 auto 1.75rem;
+  }
+  .notify-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+  .notify-form input {
+    flex: 1 1 220px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #1a1d23;
+  }
+  .notify-form input:focus {
+    outline: none;
+    border-color: #1a7d53;
+    box-shadow: 0 0 0 3px rgba(26, 125, 83, 0.15);
+  }
+  .notify-form button {
+    padding: 0.75rem 1.4rem;
+    background: #1a7d53;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .notify-form button:hover { background: #0f4c35; transform: translateY(-2px); }
+
+  /* C) Info */
+  .info { padding: 3rem 0; background: #f8fafc; }
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.75rem;
+  }
+  .info-col { text-align: center; }
+  .info-icon { font-size: 2.6rem; display: block; margin-bottom: 0.75rem; line-height: 1; }
+  .info-col h3 { font-size: 1.05rem; color: #0f4c35; margin-bottom: 0.5rem; }
+  .info-col p { color: #64748b; font-size: 0.92rem; line-height: 1.65; margin: 0; }
+
+  /* D) FAQ */
+  .faq-section { padding: 3rem 0 4.5rem; background: #fff; }
+  .faq-section h2 {
+    text-align: center;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    margin-bottom: 2rem;
+  }
+  .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .faq-item summary {
+    cursor: pointer;
+    padding: 1.1rem 1.25rem;
+    font-weight: 600;
+    font-size: 1rem;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    color: #1a1d23;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: '+';
+    font-size: 1.4rem;
+    color: #1a7d53;
+    font-weight: 400;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .faq-item[open] summary::after { transform: rotate(45deg); }
+  .faq-item[open] summary { color: #0f4c35; }
+  .faq-answer { padding: 0 1.25rem 1.2rem; }
+  .faq-answer p { margin: 0; color: #475569; font-size: 0.95rem; line-height: 1.7; }
+
+  @media (max-width: 768px) {
+    .soon-section { padding: 2rem 0; }
+    .info { padding: 2.5rem 0; }
+  }
+</style>

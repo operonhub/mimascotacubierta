@@ -1,6 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Comparador from '../components/Comparador.astro';
+import { getCollection } from 'astro:content';
+
+// Últimas 3 guías publicadas (más nuevas primero). Si todavía no hay
+// artículos, `sorted` queda vacío y mostramos las tarjetas de ejemplo.
+const recentArticles = await getCollection('blog', ({ data }) => !data.draft);
+const sorted = recentArticles
+  .sort(
+    (a, b) =>
+      new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime(),
+  )
+  .slice(0, 3);
 ---
 
 <Layout
@@ -135,30 +146,45 @@ import Comparador from '../components/Comparador.astro';
         <h2>Guías recientes</h2>
       </div>
       <div class="art-grid">
-        <article class="art-card">
-          <div class="art-img" aria-hidden="true"></div>
-          <div class="art-body">
-            <span class="art-cat">Gastos veterinarios</span>
-            <h3>¿Cuánto cuesta una consulta veterinaria en 2026?</h3>
-            <a href="/gastos-veterinarios" class="art-link">Leer artículo →</a>
-          </div>
-        </article>
-        <article class="art-card">
-          <div class="art-img" aria-hidden="true"></div>
-          <div class="art-body">
-            <span class="art-cat">Seguros</span>
-            <h3>Los 5 mejores seguros para perros en México</h3>
-            <a href="/seguros-mascotas" class="art-link">Leer artículo →</a>
-          </div>
-        </article>
-        <article class="art-card">
-          <div class="art-img" aria-hidden="true"></div>
-          <div class="art-body">
-            <span class="art-cat">Salud</span>
-            <h3>Enfermedades más comunes en golden retrievers</h3>
-            <a href="/salud-enfermedades" class="art-link">Leer artículo →</a>
-          </div>
-        </article>
+        {sorted.length > 0 ? (
+          sorted.map((article) => (
+            <article class="art-card">
+              <div class="art-img" aria-hidden="true"></div>
+              <div class="art-body">
+                <span class="art-cat">{article.data.category}</span>
+                <h3>{article.data.title}</h3>
+                <a href={`/${article.id}/`} class="art-link">Leer artículo →</a>
+              </div>
+            </article>
+          ))
+        ) : (
+          <>
+            <article class="art-card">
+              <div class="art-img" aria-hidden="true"></div>
+              <div class="art-body">
+                <span class="art-cat">Gastos veterinarios</span>
+                <h3>¿Cuánto cuesta una consulta veterinaria en 2026?</h3>
+                <a href="/gastos-veterinarios" class="art-link">Leer artículo →</a>
+              </div>
+            </article>
+            <article class="art-card">
+              <div class="art-img" aria-hidden="true"></div>
+              <div class="art-body">
+                <span class="art-cat">Seguros</span>
+                <h3>Los 5 mejores seguros para perros en México</h3>
+                <a href="/seguros-mascotas" class="art-link">Leer artículo →</a>
+              </div>
+            </article>
+            <article class="art-card">
+              <div class="art-img" aria-hidden="true"></div>
+              <div class="art-body">
+                <span class="art-cat">Salud</span>
+                <h3>Enfermedades más comunes en golden retrievers</h3>
+                <a href="/salud-enfermedades" class="art-link">Leer artículo →</a>
+              </div>
+            </article>
+          </>
+        )}
       </div>
       <div class="section-cta">
         <a href="/seguros-mascotas" class="btn btn-outline">Ver todas las guías →</a>

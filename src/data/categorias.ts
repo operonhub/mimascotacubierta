@@ -61,7 +61,7 @@ export const categorias = [
     descripcion: "Qué hacer ante una emergencia veterinaria: guías de acción rápida y dónde encontrar guardia.",
     intro: "Una urgencia veterinaria no avisa. Saber qué hacer en los primeros minutos puede marcar la diferencia. Acá encontrás guías claras para las emergencias más frecuentes: intoxicaciones, golpes, fracturas, golpe de calor y más.",
     emoji: "🚨",
-    color: "#dc2626",
+    color: "#0f4c35",
     keywords: ["urgencias veterinarias", "emergencia mascota", "guardia veterinaria"],
     stats: [
       { valor: "7+", label: "guías de urgencia" },

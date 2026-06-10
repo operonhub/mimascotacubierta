@@ -1,6 +1,201 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Comparador from '../../components/Comparador.astro';
+
+const faqs = [
+  {
+    q: '¿Cuánto cuesta un seguro de mascotas en Argentina?',
+    a: 'Los planes que relevamos van desde $11.400 ARS/mes (Naranja X Plan Básico) hasta $22.168 ARS/mes (Life Seguros Plan Full). Los precios varían con la inflación y se actualizan mensualmente.',
+  },
+  {
+    q: '¿Qué aseguradoras ofrecen seguros para mascotas en Argentina?',
+    a: 'Entre las principales están Naranja X, Banco Hipotecario y Life Seguros. Cada una ofrece distintos niveles de cobertura y precios.',
+  },
+  {
+    q: '¿Los seguros cubren perros y gatos en Argentina?',
+    a: 'Sí, todos los planes que comparamos cubren tanto perros como gatos.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
 ---
-<Layout title="Seguros para Mascotas en Argentina">
-	<h1>Seguros para Mascotas en Argentina</h1>
+
+<Layout
+  title="Seguros de mascotas en Argentina (2026) — Comparativa completa | MiMascotaCubierta.com"
+  description="Comparamos todos los seguros de mascotas disponibles en Argentina. Precios reales en ARS, coberturas detalladas y opiniones verificadas."
+>
+  <!-- ─── A) HERO ─────────────────────────────────────── -->
+  <section class="cmp-hero">
+    <div class="container">
+      <h1>Seguros de mascotas en Argentina</h1>
+      <p class="cmp-sub">
+        Comparamos todos los planes disponibles en 2026 con precios reales en pesos.
+      </p>
+      <ul class="trust-badges">
+        <li>✓ Datos verificados</li>
+        <li>✓ Actualizado mensualmente</li>
+        <li>✓ Sin publicidad engañosa</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─── B) COMPARADOR (pre-filtrado a Argentina) ────── -->
+  <section class="cmp-section">
+    <div class="container">
+      <Comparador mode="full" />
+    </div>
+  </section>
+
+  <!-- ─── C) INFO ─────────────────────────────────────── -->
+  <section class="info">
+    <div class="container">
+      <div class="info-grid">
+        <div class="info-col">
+          <span class="info-icon" aria-hidden="true">📈</span>
+          <h3>Mercado en crecimiento</h3>
+          <p>El mercado de seguros para mascotas en Argentina creció más de un 30% en los últimos 2 años.</p>
+        </div>
+        <div class="info-col">
+          <span class="info-icon" aria-hidden="true">💵</span>
+          <h3>Precios en ARS</h3>
+          <p>Todos los precios están expresados en pesos argentinos y se actualizan mensualmente.</p>
+        </div>
+        <div class="info-col">
+          <span class="info-icon" aria-hidden="true">🇦🇷</span>
+          <h3>Cobertura nacional</h3>
+          <p>Los seguros que comparamos tienen cobertura en todo el territorio argentino.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── D) FAQ ──────────────────────────────────────── -->
+  <section class="faq-section">
+    <div class="container container-narrow">
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <details class="faq-item">
+            <summary>{f.q}</summary>
+            <div class="faq-answer"><p>{f.a}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Pre-selecciona Argentina en el comparador una vez que el
+       script del componente terminó de inicializarse (evita la carrera
+       con su geotargeting por zona horaria). -->
+  <script>
+    window.addEventListener('load', () => {
+      const sel = document.querySelector(
+        '.comparador[data-mode="full"] [data-filtro="pais"]',
+      ) as HTMLSelectElement | null;
+      if (sel) {
+        sel.value = 'AR';
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+  </script>
 </Layout>
+
+<style>
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+  .container-narrow { max-width: 760px; }
+
+  /* A) Hero */
+  .cmp-hero { background: #0f4c35; color: #fff; padding: 3.5rem 0 3rem; }
+  .cmp-hero h1 {
+    color: #fff;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 0.85rem;
+  }
+  .cmp-sub {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.1rem;
+    max-width: 620px;
+    margin-bottom: 1.5rem;
+  }
+  .trust-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .trust-badges li { font-size: 0.9rem; font-weight: 600; color: #6efac1; }
+
+  /* B) Comparador */
+  .cmp-section { padding: 3rem 0; background: #fff; }
+
+  /* C) Info */
+  .info { padding: 3rem 0; background: #f8fafc; }
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.75rem;
+  }
+  .info-col { text-align: center; }
+  .info-icon { font-size: 2.6rem; display: block; margin-bottom: 0.75rem; line-height: 1; }
+  .info-col h3 { font-size: 1.05rem; color: #0f4c35; margin-bottom: 0.5rem; }
+  .info-col p { color: #64748b; font-size: 0.92rem; line-height: 1.65; margin: 0; }
+
+  /* D) FAQ */
+  .faq-section { padding: 3rem 0 4.5rem; background: #fff; }
+  .faq-section h2 {
+    text-align: center;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    margin-bottom: 2rem;
+  }
+  .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .faq-item summary {
+    cursor: pointer;
+    padding: 1.1rem 1.25rem;
+    font-weight: 600;
+    font-size: 1rem;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    color: #1a1d23;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: '+';
+    font-size: 1.4rem;
+    color: #1a7d53;
+    font-weight: 400;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .faq-item[open] summary::after { transform: rotate(45deg); }
+  .faq-item[open] summary { color: #0f4c35; }
+  .faq-answer { padding: 0 1.25rem 1.2rem; }
+  .faq-answer p { margin: 0; color: #475569; font-size: 0.95rem; line-height: 1.7; }
+
+  @media (max-width: 768px) {
+    .cmp-section { padding: 2rem 0; }
+    .info { padding: 2.5rem 0; }
+  }
+</style>

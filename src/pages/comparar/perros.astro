@@ -1,6 +1,157 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Comparador from '../../components/Comparador.astro';
 ---
-<Layout title="Comparar Seguros para Perros">
-	<h1>Comparar Seguros para Perros</h1>
+
+<Layout
+  title="Seguros para perros (2026) — Comparativa y precios | MiMascotaCubierta.com"
+  description="Los mejores seguros para perros en Argentina y México. Comparamos precios, coberturas y opiniones para que elijas el mejor plan."
+>
+  <!-- ─── A) HERO ─────────────────────────────────────── -->
+  <section class="cmp-hero">
+    <div class="container">
+      <h1>Seguros para perros</h1>
+      <p class="cmp-sub">
+        Comparamos todos los planes disponibles para perros en Argentina y México.
+      </p>
+      <ul class="trust-badges">
+        <li>✓ Datos verificados</li>
+        <li>✓ Actualizado mensualmente</li>
+        <li>✓ Sin publicidad engañosa</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─── B) COMPARADOR (pre-filtrado a perros) ───────── -->
+  <section class="cmp-section">
+    <div class="container">
+      <Comparador mode="full" />
+
+      <!-- Enlaces relacionados -->
+      <div class="link-row">
+        <a class="link-card" href="/razas/perros">
+          <span class="link-emoji" aria-hidden="true">🐕</span>
+          <span class="link-text">¿Buscás información sobre tu raza?</span>
+          <span class="link-arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="link-card" href="/gastos-veterinarios">
+          <span class="link-emoji" aria-hidden="true">💰</span>
+          <span class="link-text">Guías de gastos veterinarios</span>
+          <span class="link-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── C) INFO ─────────────────────────────────────── -->
+  <section class="info">
+    <div class="container">
+      <div class="info-grid">
+        <div class="info-col">
+          <span class="info-icon" aria-hidden="true">🎯</span>
+          <h3>Cobertura específica</h3>
+          <p>Algunos seguros ajustan la prima según la raza, el tamaño y la edad del perro.</p>
+        </div>
+        <div class="info-col">
+          <span class="info-icon" aria-hidden="true">⚠️</span>
+          <h3>Razas de alto riesgo</h3>
+          <p>Razas como Rottweiler, Pitbull o Dogo Argentino pueden tener condiciones especiales o requerir cobertura de responsabilidad civil.</p>
+        </div>
+        <div class="info-col">
+          <span class="info-icon" aria-hidden="true">💉</span>
+          <h3>Prevención incluida</h3>
+          <p>Los mejores planes incluyen vacunas y desparasitación dentro de la cobertura preventiva.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pre-selecciona "perros" en el comparador tras la
+       inicialización del componente. -->
+  <script>
+    window.addEventListener('load', () => {
+      const sel = document.querySelector(
+        '.comparador[data-mode="full"] [data-filtro="tipo"]',
+      ) as HTMLSelectElement | null;
+      if (sel) {
+        sel.value = 'perros';
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+  </script>
 </Layout>
+
+<style>
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* A) Hero */
+  .cmp-hero { background: #0f4c35; color: #fff; padding: 3.5rem 0 3rem; }
+  .cmp-hero h1 {
+    color: #fff;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 0.85rem;
+  }
+  .cmp-sub {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.1rem;
+    max-width: 620px;
+    margin-bottom: 1.5rem;
+  }
+  .trust-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .trust-badges li { font-size: 0.9rem; font-weight: 600; color: #6efac1; }
+
+  /* B) Comparador + enlaces */
+  .cmp-section { padding: 3rem 0; background: #fff; }
+  .link-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .link-card {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    text-decoration: none;
+    color: #1a1d23;
+    transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  }
+  .link-card:hover {
+    border-color: #1a7d53;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    text-decoration: none;
+  }
+  .link-emoji { font-size: 1.5rem; line-height: 1; }
+  .link-text { flex: 1; font-size: 0.95rem; font-weight: 600; }
+  .link-arrow { color: #1a7d53; font-weight: 700; }
+
+  /* C) Info */
+  .info { padding: 3rem 0; background: #f8fafc; }
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.75rem;
+  }
+  .info-col { text-align: center; }
+  .info-icon { font-size: 2.6rem; display: block; margin-bottom: 0.75rem; line-height: 1; }
+  .info-col h3 { font-size: 1.05rem; color: #0f4c35; margin-bottom: 0.5rem; }
+  .info-col p { color: #64748b; font-size: 0.92rem; line-height: 1.65; margin: 0; }
+
+  @media (max-width: 768px) {
+    .cmp-section { padding: 2rem 0; }
+    .info { padding: 2.5rem 0; }
+  }
+</style>

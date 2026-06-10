@@ -1,6 +1,182 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import { categorias } from '../../../data/categorias';
+
+const cat = categorias.find((c) => c.slug === 'razas')!;
+
+const breeds = [
+  { emoji: '🐈', nombre: 'Persa', desc: 'Problemas oculares y respiratorios', slug: 'persa' },
+  { emoji: '🐈', nombre: 'Siamés', desc: 'Predisposición a problemas dentales y respiratorios', slug: 'siames' },
+  { emoji: '🐈', nombre: 'Maine Coon', desc: 'Cardiomiopatía hipertrófica', slug: 'maine-coon' },
+  { emoji: '🐈', nombre: 'Ragdoll', desc: 'Problemas cardíacos hereditarios', slug: 'ragdoll' },
+  { emoji: '🐈', nombre: 'Bengalí', desc: 'Enfermedades digestivas y cardíacas', slug: 'bengali' },
+  { emoji: '🐈', nombre: 'Abisinio', desc: 'Amiloidosis renal', slug: 'abisinio' },
+  { emoji: '🐈', nombre: 'Sphynx', desc: 'Problemas cardíacos y de piel', slug: 'sphynx' },
+  { emoji: '🐈', nombre: 'Británico de Pelo Corto', desc: 'Obesidad y problemas cardíacos', slug: 'britanico-pelo-corto' },
+];
 ---
-<Layout title="Razas de Gatos">
-	<h1>Razas de Gatos</h1>
+
+<Layout
+  title="Razas de gatos — Salud, cuidados y gastos | MiMascotaCubierta.com"
+  description="Guías completas por raza de gato: enfermedades frecuentes, gastos veterinarios anuales y cuidados específicos."
+>
+  <!-- ─── A) HERO ─────────────────────────────────────── -->
+  <section class="cat-hero" style={`background:${cat.color}`}>
+    <div class="container">
+      <span class="cat-emoji" aria-hidden="true">🐈</span>
+      <h1>Razas de gatos</h1>
+      <p class="cat-desc">Guías de salud, cuidados y gastos para las razas más populares.</p>
+      <div class="cat-stats">
+        <div class="stat-box"><span class="stat-valor">10+</span><span class="stat-label">razas analizadas</span></div>
+        <div class="stat-box"><span class="stat-valor">Gastos</span><span class="stat-label">reales</span></div>
+        <div class="stat-box"><span class="stat-valor">Info</span><span class="stat-label">veterinaria</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── B) INTRO ────────────────────────────────────── -->
+  <section class="cat-intro">
+    <div class="container container-narrow">
+      <nav class="breadcrumb" aria-label="Migas de pan">
+        <a href="/">Home</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <a href="/razas">Razas</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <span class="crumb-current">Gatos</span>
+      </nav>
+      <p class="intro-text">
+        Los gatos de raza tienen necesidades muy específicas. Un Persa necesita
+        limpieza ocular diaria; un Maine Coon tiene predisposición a cardiomiopatía
+        hipertrófica; un Siamés puede desarrollar problemas respiratorios. Conocer la
+        raza antes de adoptar te ayuda a anticipar los gastos veterinarios.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── C) BREEDS GRID ──────────────────────────────── -->
+  <section class="breeds">
+    <div class="container">
+      <div class="breed-grid">
+        {breeds.map((b) => (
+          <a class="breed-card" href={`/razas/gatos/${b.slug}/`}>
+            <span class="breed-emoji" aria-hidden="true">{b.emoji}</span>
+            <h2>{b.nombre}</h2>
+            <p>{b.desc}</p>
+            <span class="breed-link">Ver guía →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── D) CTA ──────────────────────────────────────── -->
+  <section class="cat-cta">
+    <div class="container">
+      <div class="cta-card">
+        <h2>¿Sabés cuánto cuesta asegurar a tu gato?</h2>
+        <p>Comparamos todos los planes disponibles para gatos en Argentina y México.</p>
+        <a class="cta-btn" href="/comparar/gatos">Comparar seguros para gatos →</a>
+      </div>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+  .container-narrow { max-width: 800px; }
+
+  /* A) Hero */
+  .cat-hero { color: #fff; padding: 3rem 0; text-align: center; }
+  .cat-emoji { font-size: 64px; line-height: 1; display: block; margin-bottom: 1rem; }
+  .cat-hero h1 { color: #fff; font-size: clamp(1.9rem, 5vw, 3rem); margin-bottom: 0.85rem; }
+  .cat-desc {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.15rem;
+    line-height: 1.6;
+    max-width: 720px;
+    margin: 0 auto 2rem;
+  }
+  .cat-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+  .stat-box {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    min-width: 130px;
+  }
+  .stat-valor { display: block; font-size: 1.6rem; font-weight: 800; line-height: 1.1; }
+  .stat-label { display: block; font-size: 0.82rem; color: rgba(255, 255, 255, 0.8); margin-top: 0.25rem; }
+
+  /* B) Intro */
+  .cat-intro { padding: 2.5rem 0 0; background: #fff; }
+  .breadcrumb {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .breadcrumb a { color: #64748b; text-decoration: none; }
+  .breadcrumb a:hover { color: #1a7d53; text-decoration: underline; }
+  .breadcrumb .sep { color: #cbd5e1; }
+  .crumb-current { color: #94a3b8; }
+  .intro-text { color: #374151; font-size: 1.02rem; line-height: 1.85; }
+
+  /* C) Breeds grid */
+  .breeds { padding: 3rem 0; background: #fff; }
+  .breed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+  }
+  .breed-card {
+    display: block;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-top: 3px solid #1a7d53;
+    border-radius: 12px;
+    padding: 1.75rem 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .breed-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+  }
+  .breed-emoji { font-size: 2.6rem; display: block; margin-bottom: 0.6rem; line-height: 1; }
+  .breed-card h2 { font-size: 1.1rem; color: #0f4c35; margin-bottom: 0.4rem; }
+  .breed-card p { color: #64748b; font-size: 0.88rem; line-height: 1.55; margin-bottom: 0.9rem; }
+  .breed-link { font-size: 0.88rem; font-weight: 700; color: #1a7d53; }
+
+  /* D) CTA */
+  .cat-cta { padding: 0 0 4rem; background: #fff; }
+  .cta-card {
+    background: #0f4c35;
+    border-radius: 12px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    color: #fff;
+  }
+  .cta-card h2 { color: #fff; font-size: 1.5rem; margin-bottom: 0.6rem; }
+  .cta-card p { color: rgba(255, 255, 255, 0.85); margin-bottom: 1.5rem; font-size: 1rem; }
+  .cta-btn {
+    display: inline-block;
+    background: #6efac1;
+    color: #0f4c35;
+    font-weight: 700;
+    padding: 0.85rem 1.6rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .cta-btn:hover { opacity: 0.9; transform: translateY(-2px); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    .cat-hero { padding: 2.5rem 0; }
+    .breeds { padding: 2.5rem 0; }
+  }
+</style>
