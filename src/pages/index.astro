@@ -149,7 +149,11 @@ const sorted = recentArticles
         {sorted.length > 0 ? (
           sorted.map((article) => (
             <article class="art-card">
-              <div class="art-img" aria-hidden="true"></div>
+              {article.data.image ? (
+                <img src={article.data.image} alt={article.data.imageAlt ?? article.data.title} class="art-img art-img--photo" />
+              ) : (
+                <div class="art-img" aria-hidden="true"></div>
+              )}
               <div class="art-body">
                 <span class="art-cat">{article.data.category}</span>
                 <h3>{article.data.title}</h3>
@@ -377,6 +381,10 @@ const sorted = recentArticles
   width: 100%;
   aspect-ratio: 16 / 9;
   background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+}
+.art-img--photo {
+  object-fit: cover;
+  display: block;
 }
 .art-body { padding: 1.25rem 1.25rem 1.5rem; }
 .art-cat {
