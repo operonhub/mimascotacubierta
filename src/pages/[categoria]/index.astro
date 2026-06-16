@@ -79,7 +79,11 @@ const showCta = ['seguros-mascotas', 'gastos-veterinarios', 'urgencias'].include
         <div class="art-grid">
           {articles.map((article) => (
             <a class="art-card" href={`/${article.id}/`}>
-              <div class="art-img" aria-hidden="true"></div>
+              {article.data.image ? (
+                <img src={article.data.image} alt={article.data.imageAlt ?? article.data.title} class="art-img art-img--photo" loading="lazy" />
+              ) : (
+                <div class="art-img" aria-hidden="true"></div>
+              )}
               <div class="art-body">
                 <span class="art-cat">{article.data.category}</span>
                 <h2>{article.data.title}</h2>
@@ -213,6 +217,10 @@ const showCta = ['seguros-mascotas', 'gastos-veterinarios', 'urgencias'].include
     width: 100%;
     aspect-ratio: 16 / 9;
     background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  }
+  .art-img--photo {
+    object-fit: cover;
+    display: block;
   }
   .art-body { padding: 1.25rem 1.25rem 1.5rem; }
   .art-cat {
