@@ -1,0 +1,88 @@
+---
+interface Props {
+  title: string;
+  category: string;
+  pubDate: Date;
+  href: string;
+  image?: string;
+  imageAlt?: string;
+}
+
+const { title, category, pubDate, href, image, imageAlt } = Astro.props;
+
+const fmtDate = (date: Date) => {
+  const d = date instanceof Date ? date : new Date(date);
+  return `${String(d.getUTCDate()).padStart(2, '0')}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${d.getUTCFullYear()}`;
+};
+---
+
+<a class="art-card" href={href}>
+  {image ? (
+    <img src={image} alt={imageAlt ?? title} class="art-img art-img--photo" loading="lazy" />
+  ) : (
+    <div class="art-img" aria-hidden="true"></div>
+  )}
+  <div class="art-body">
+    <span class="art-cat">{category}</span>
+    <h3>{title}</h3>
+    <span class="art-date">{fmtDate(pubDate)}</span>
+    <span class="art-link">Leer artículo →</span>
+  </div>
+</a>
+
+<style>
+.art-card {
+  display: block;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.art-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+.art-img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+}
+.art-img--photo {
+  object-fit: cover;
+  display: block;
+}
+.art-body { padding: 1.25rem 1.25rem 1.5rem; }
+.art-cat {
+  display: inline-block;
+  background: #f0fdf4;
+  color: #0f4c35;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  margin-bottom: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.art-card h3 {
+  font-size: 0.98rem;
+  margin-bottom: 0.55rem;
+  line-height: 1.45;
+  color: #1a1d23;
+}
+.art-date {
+  display: block;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-bottom: 0.85rem;
+}
+.art-link {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1a7d53;
+}
+</style>

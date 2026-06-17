@@ -114,6 +114,207 @@
       "popular": false,
       "url_afiliado": "#",
       "actualizado": "2026-06-08"
+    },
+    {
+      "id": "fielpet-plan1",
+      "nombre": "FielPet",
+      "plan": "Plan 1 · $500.000/año",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 19047,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": false,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": false,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": false,
+      "popular": true,
+      "url_afiliado": "https://www.fielpet.com/contratar/1",
+      "actualizado": "2026-06-16",
+      "aseguradora": "BBVA Seguros Argentina (Dawer Brokers)",
+      "url_sitio": "https://www.fielpet.com/",
+      "coberturas_ext": {
+        "consultas_rutina": false,
+        "urgencias_24hs": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "medicamentos": true,
+        "analisis": true,
+        "imagenologia": true,
+        "vacunas": true,
+        "castracion": false,
+        "dental": null,
+        "enfermedades_cronicas": null,
+        "responsabilidad_civil": true,
+        "viajes_argentina": true,
+        "viajes_internacionales": false,
+        "telemedicina": true
+      },
+      "condiciones": {
+        "especies": ["perros", "gatos"],
+        "edad_minima_meses": 3,
+        "edad_maxima_anios": 18,
+        "razas_excluidas": [],
+        "carencia_dias": 30,
+        "franquicia_pct": null,
+        "franquicia_monto_ars": null,
+        "tope_anual_ars": 500000
+      },
+      "contratacion": {
+        "online_100pct": true,
+        "url_cotizar": "https://www.fielpet.com/contratar/1",
+        "requiere_revision_medica": false,
+        "medios_pago": ["tarjeta de crédito", "débito automático (CBU)", "Naranja común", "Naranja Visa"]
+      },
+      "red_veterinaria": {
+        "red_propia": false,
+        "reembolso_libre_eleccion": true
+      },
+      "evaluacion": {
+        "facilidad_info": 5,
+        "precios_publicos": true,
+        "notas": "Precios base para mascotas de 3m-9a. Escalan por edad: 10-13a $28.619, 13-18a $32.591. Reembolso 100% vía app. RC $5.000.000 en todos los planes."
+      }
+    },
+    {
+      "id": "fielpet-plan3",
+      "nombre": "FielPet",
+      "plan": "Plan 3 · $1.000.000/año",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 36970,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": false,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": false,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": false,
+      "popular": false,
+      "url_afiliado": "https://www.fielpet.com/contratar/1",
+      "actualizado": "2026-06-16",
+      "aseguradora": "BBVA Seguros Argentina (Dawer Brokers)",
+      "url_sitio": "https://www.fielpet.com/",
+      "coberturas_ext": {
+        "consultas_rutina": false,
+        "urgencias_24hs": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "medicamentos": true,
+        "analisis": true,
+        "imagenologia": true,
+        "vacunas": true,
+        "castracion": false,
+        "dental": null,
+        "enfermedades_cronicas": null,
+        "responsabilidad_civil": true,
+        "viajes_argentina": true,
+        "viajes_internacionales": false,
+        "telemedicina": true
+      },
+      "condiciones": {
+        "especies": ["perros", "gatos"],
+        "edad_minima_meses": 3,
+        "edad_maxima_anios": 18,
+        "razas_excluidas": [],
+        "carencia_dias": 30,
+        "franquicia_pct": null,
+        "franquicia_monto_ars": null,
+        "tope_anual_ars": 1000000
+      },
+      "contratacion": {
+        "online_100pct": true,
+        "url_cotizar": "https://www.fielpet.com/contratar/1",
+        "requiere_revision_medica": false,
+        "medios_pago": ["tarjeta de crédito", "débito automático (CBU)", "Naranja común", "Naranja Visa"]
+      },
+      "red_veterinaria": {
+        "red_propia": false,
+        "reembolso_libre_eleccion": true
+      },
+      "evaluacion": {
+        "facilidad_info": 5,
+        "precios_publicos": true,
+        "notas": "Precios base para mascotas de 3m-9a. Escalan por edad: 10-13a $55.624, 13-18a $63.302. Reembolso 100% vía app. RC $5.000.000 en todos los planes."
+      }
+    },
+    {
+      "id": "fielpet-plan5",
+      "nombre": "FielPet",
+      "plan": "Plan 5 · $2.000.000/año",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 72815,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": false,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": false,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": true,
+      "popular": false,
+      "url_afiliado": "https://www.fielpet.com/contratar/1",
+      "actualizado": "2026-06-16",
+      "aseguradora": "BBVA Seguros Argentina (Dawer Brokers)",
+      "url_sitio": "https://www.fielpet.com/",
+      "coberturas_ext": {
+        "consultas_rutina": false,
+        "urgencias_24hs": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "medicamentos": true,
+        "analisis": true,
+        "imagenologia": true,
+        "vacunas": true,
+        "castracion": false,
+        "dental": null,
+        "enfermedades_cronicas": null,
+        "responsabilidad_civil": true,
+        "viajes_argentina": true,
+        "viajes_internacionales": false,
+        "telemedicina": true
+      },
+      "condiciones": {
+        "especies": ["perros", "gatos"],
+        "edad_minima_meses": 3,
+        "edad_maxima_anios": 18,
+        "razas_excluidas": [],
+        "carencia_dias": 30,
+        "franquicia_pct": null,
+        "franquicia_monto_ars": null,
+        "tope_anual_ars": 2000000
+      },
+      "contratacion": {
+        "online_100pct": true,
+        "url_cotizar": "https://www.fielpet.com/contratar/1",
+        "requiere_revision_medica": false,
+        "medios_pago": ["tarjeta de crédito", "débito automático (CBU)", "Naranja común", "Naranja Visa"]
+      },
+      "red_veterinaria": {
+        "red_propia": false,
+        "reembolso_libre_eleccion": true
+      },
+      "evaluacion": {
+        "facilidad_info": 5,
+        "precios_publicos": true,
+        "notas": "Precios base para mascotas de 3m-9a. Escalan por edad: 10-13a $111.104, 13-18a $126.990. Reembolso 100% vía app. RC $5.000.000 en todos los planes. Mayor cobertura del mercado."
+      }
     }
   ]
 }
