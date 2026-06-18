@@ -8,22 +8,31 @@ const { mode = 'full' } = Astro.props;
 
 type Seguro = (typeof segurosData.seguros)[number];
 
-// Score derivado: cantidad de coberturas incluidas (proxy honesto de "puntuación")
 const withScore = segurosData.seguros.map((s) => ({
   ...s,
   score: Object.values(s.coberturas).filter(Boolean).length,
+  grupoKey: (s as any).grupo ?? s.id,
 }));
 
-// preview = los 3 AR más baratos; full = todos
-const rows =
-  mode === 'preview'
-    ? withScore
-        .filter((s) => s.pais === 'AR')
-        .sort((a, b) => a.precio_mensual - b.precio_mensual)
-        .slice(0, 3)
-    : withScore.slice().sort((a, b) => a.precio_mensual - b.precio_mensual);
+// Sort all by price ascending
+const sorted = withScore.slice().sort((a, b) => a.precio_mensual - b.precio_mensual);
 
-// Fecha de última actualización (la más reciente del set)
+// Group by grupoKey — order of first appearance determines group order (cheapest plan first)
+const groupMap = new Map<string, typeof sorted>();
+for (const s of sorted) {
+  if (!groupMap.has(s.grupoKey)) groupMap.set(s.grupoKey, []);
+  groupMap.get(s.grupoKey)!.push(s);
+}
+
+// All groups sorted by cheapest plan in group
+let groups = Array.from(groupMap.values());
+
+// Preview: 3 cheapest AR groups; Full: all groups
+if (mode === 'preview') {
+  groups = groups.filter((g) => g[0].pais === 'AR').slice(0, 3);
+}
+
+// Fecha de última actualización
 const lastUpdatedISO = segurosData.seguros.reduce(
   (max, s) => (s.actualizado > max ? s.actualizado : max),
   '',
@@ -36,13 +45,13 @@ const fmtDate = (iso: string) => {
 
 const fmtPrice = (n: number) => n.toLocaleString('es-AR');
 
-// Columnas de cobertura mostradas en la tabla
+// Columnas de cobertura visibles en la tabla
 const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
-  { key: 'consultas', label: 'Consultas' },
-  { key: 'urgencias', label: 'Urgencias' },
-  { key: 'extravio', label: 'Extravío' },
-  { key: 'responsabilidad_civil', label: 'R. Civil' },
-  { key: 'vacunas', label: 'Vacunas' },
+  { key: 'consultas',             label: 'Consultas' },
+  { key: 'urgencias',             label: 'Urgencias' },
+  { key: 'extravio',              label: 'Extravío'  },
+  { key: 'responsabilidad_civil', label: 'R. Civil'  },
+  { key: 'vacunas',               label: 'Vacunas'   },
 ];
 ---
 
@@ -94,41 +103,69 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
         </tr>
       </thead>
       <tbody>
-        {rows.map((s) => (
-          <tr
-            data-pais={s.pais}
-            data-tipo={s.tipo.join(',')}
-            data-precio={s.precio_mensual}
-            data-score={s.score}
-          >
-            <td class="col-sticky-left td-name">
-              <div class="aseg">
-                <span class="aseg-nombre">{s.nombre}</span>
-                <span class="aseg-plan">{s.plan}</span>
-                <span class="badges">
-                  {s.popular && <span class="badge badge-popular">Más popular</span>}
-                  {s.destacado && <span class="badge badge-reco">Recomendado</span>}
-                </span>
-              </div>
-            </td>
-            <td class="td-precio">
-              <strong>${fmtPrice(s.precio_mensual)}</strong>
-              <span class="moneda">{s.moneda}/mes</span>
-            </td>
-            {cobCols.map((c) => (
-              <td class="col-center">
-                {s.coberturas[c.key] ? (
-                  <span class="ico-yes" aria-label="Incluido">✓</span>
-                ) : (
-                  <span class="ico-no" aria-label="No incluido">✗</span>
-                )}
+        {groups.map((grupo) => {
+          const first = grupo[0];
+          const isMulti = grupo.length > 1;
+          const planesData = isMulti
+            ? grupo.map((s) => ({
+                plan: s.plan,
+                precio_mensual: s.precio_mensual,
+                moneda: s.moneda,
+                url_afiliado: s.url_afiliado,
+                popular: s.popular,
+                destacado: s.destacado,
+                coberturas: Object.fromEntries(
+                  cobCols.map((c) => [c.key, s.coberturas[c.key]])
+                ),
+              }))
+            : null;
+
+          return (
+            <tr
+              data-pais={first.pais}
+              data-tipo={first.tipo.join(',')}
+              data-precio={first.precio_mensual}
+              data-score={first.score}
+              {...(planesData ? { 'data-planes': JSON.stringify(planesData) } : {})}
+            >
+              <td class="col-sticky-left td-name">
+                <div class="aseg">
+                  <span class="aseg-nombre">{first.nombre}</span>
+                  <span class="aseg-plan js-plan-label">{first.plan}</span>
+                  <span class="badges js-badges">
+                    {first.popular   && <span class="badge badge-popular">Más popular</span>}
+                    {first.destacado && <span class="badge badge-reco">Recomendado</span>}
+                  </span>
+                  {isMulti && (
+                    <select class="plan-selector" aria-label={`Elegir plan de ${first.nombre}`}>
+                      {grupo.map((s, i) => (
+                        <option value={i}>{s.plan} — ${fmtPrice(s.precio_mensual)}/mes</option>
+                      ))}
+                    </select>
+                  )}
+                </div>
               </td>
-            ))}
-            <td class="col-sticky-right">
-              <a href={s.url_afiliado} class="btn-oferta" rel="nofollow sponsored">Ver oferta</a>
-            </td>
-          </tr>
-        ))}
+              <td class="td-precio">
+                <strong class="js-precio">${fmtPrice(first.precio_mensual)}</strong>
+                <span class="moneda js-moneda">{first.moneda}/mes</span>
+              </td>
+              {cobCols.map((c) => (
+                <td class="col-center">
+                  {first.coberturas[c.key] ? (
+                    <span class={`ico-yes js-cob js-cob-${c.key}`} aria-label="Incluido">✓</span>
+                  ) : (
+                    <span class={`ico-no js-cob js-cob-${c.key}`} aria-label="No incluido">✗</span>
+                  )}
+                </td>
+              ))}
+              <td class="col-sticky-right">
+                <a href={first.url_afiliado} class="btn-oferta js-url" rel="nofollow sponsored">
+                  Ver oferta
+                </a>
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   </div>
@@ -141,36 +178,43 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
 
 {mode === 'full' && (
   <script>
-    const root = document.querySelector('.comparador[data-mode="full"]');
+    const root = document.querySelector('.comparador[data-mode="full"]') as HTMLElement | null;
     if (root) {
-      const paisSel = root.querySelector('[data-filtro="pais"]') as HTMLSelectElement | null;
-      const tipoSel = root.querySelector('[data-filtro="tipo"]') as HTMLSelectElement | null;
-      const ordenSel = root.querySelector('[data-filtro="orden"]') as HTMLSelectElement | null;
-      const tbody = root.querySelector('tbody') as HTMLTableSectionElement | null;
-      const tableWrap = root.querySelector('[data-table-wrap]') as HTMLElement | null;
-      const tableNote = root.querySelector('[data-table-note]') as HTMLElement | null;
-      const mxSoon = root.querySelector('[data-mx-soon]') as HTMLElement | null;
+      const paisSel   = root.querySelector('[data-filtro="pais"]')  as HTMLSelectElement | null;
+      const tipoSel   = root.querySelector('[data-filtro="tipo"]')  as HTMLSelectElement | null;
+      const ordenSel  = root.querySelector('[data-filtro="orden"]') as HTMLSelectElement | null;
+      const tbody     = root.querySelector('tbody')                  as HTMLTableSectionElement | null;
+      const tableWrap = root.querySelector('[data-table-wrap]')      as HTMLElement | null;
+      const tableNote = root.querySelector('[data-table-note]')      as HTMLElement | null;
+      const mxSoon    = root.querySelector('[data-mx-soon]')         as HTMLElement | null;
+
+      const fmtNum = (n: number) => n.toLocaleString('es-AR');
+
+      const makeBadge = (cls: string, text: string) => {
+        const span = document.createElement('span');
+        span.className = cls;
+        span.textContent = text;
+        return span;
+      };
 
       if (paisSel && tipoSel && ordenSel && tbody && tableWrap && tableNote && mxSoon) {
         const apply = () => {
-          const pais = paisSel.value;
-          const tipo = tipoSel.value;
+          const pais  = paisSel.value;
+          const tipo  = tipoSel.value;
           const orden = ordenSel.value;
 
-          // México todavía sin datos → mostrar "Próximamente"
           if (pais === 'MX') {
             tableWrap.hidden = true;
             tableNote.hidden = true;
-            mxSoon.hidden = false;
+            mxSoon.hidden    = false;
             return;
           }
           tableWrap.hidden = false;
           tableNote.hidden = false;
-          mxSoon.hidden = true;
+          mxSoon.hidden    = true;
 
           const trs = Array.from(tbody.querySelectorAll<HTMLTableRowElement>('tr[data-pais]'));
 
-          // Ordenar reubicando nodos
           trs.sort((a, b) => {
             if (orden === 'score') {
               return Number(b.dataset.score) - Number(a.dataset.score);
@@ -179,23 +223,76 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
           });
           trs.forEach((tr) => tbody.appendChild(tr));
 
-          // Filtrar
           trs.forEach((tr) => {
             const okPais = pais === 'todos' || tr.dataset.pais === pais;
-            const okTipo =
-              tipo === 'todos' || (tr.dataset.tipo || '').split(',').includes(tipo);
+            const okTipo = tipo === 'todos' || (tr.dataset.tipo || '').split(',').includes(tipo);
             tr.classList.toggle('row-hidden', !(okPais && okTipo));
           });
         };
 
-        // Geotargeting: zona horaria → país por defecto
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-        if (tz.includes('Argentina')) paisSel.value = 'AR';
-        else if (tz.includes('Mexico')) paisSel.value = 'MX';
-        else paisSel.value = 'todos';
+        // ── Plan selector dentro de cada fila ──────────────────────────────
+        root.querySelectorAll<HTMLSelectElement>('.plan-selector').forEach((sel) => {
+          sel.addEventListener('change', () => {
+            const tr = sel.closest<HTMLTableRowElement>('tr');
+            if (!tr || !tr.dataset.planes) return;
 
-        paisSel.addEventListener('change', apply);
-        tipoSel.addEventListener('change', apply);
+            type PlanData = {
+              plan: string;
+              precio_mensual: number;
+              moneda: string;
+              url_afiliado: string;
+              popular: boolean;
+              destacado: boolean;
+              coberturas: Record<string, boolean>;
+            };
+            const planes: PlanData[] = JSON.parse(tr.dataset.planes);
+            const plan = planes[Number(sel.value)];
+            if (!plan) return;
+
+            // Precio
+            const precioEl = tr.querySelector('.js-precio');
+            if (precioEl) precioEl.textContent = '$' + fmtNum(plan.precio_mensual);
+
+            // Label del plan en la celda nombre
+            const planLabel = tr.querySelector('.js-plan-label');
+            if (planLabel) planLabel.textContent = plan.plan;
+
+            // Cobertura checkmarks
+            Object.entries(plan.coberturas).forEach(([key, val]) => {
+              const span = tr.querySelector<HTMLElement>(`.js-cob-${key}`);
+              if (!span) return;
+              span.className   = (val ? 'ico-yes' : 'ico-no') + ` js-cob js-cob-${key}`;
+              span.textContent = val ? '✓' : '✗';
+              span.setAttribute('aria-label', val ? 'Incluido' : 'No incluido');
+            });
+
+            // Badges — usar createElement para evitar XSS
+            const badges = tr.querySelector('.js-badges');
+            if (badges) {
+              while (badges.firstChild) badges.removeChild(badges.firstChild);
+              if (plan.popular)
+                badges.appendChild(makeBadge('badge badge-popular', 'Más popular'));
+              if (plan.destacado)
+                badges.appendChild(makeBadge('badge badge-reco', 'Recomendado'));
+            }
+
+            // Botón URL
+            const urlEl = tr.querySelector<HTMLAnchorElement>('.js-url');
+            if (urlEl) urlEl.href = plan.url_afiliado;
+
+            // Actualizar data-precio para re-sort correcto
+            tr.dataset.precio = String(plan.precio_mensual);
+          });
+        });
+
+        // Geotargeting por zona horaria
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        if (tz.includes('Argentina'))   paisSel.value = 'AR';
+        else if (tz.includes('Mexico')) paisSel.value = 'MX';
+        else                            paisSel.value = 'todos';
+
+        paisSel.addEventListener('change',  apply);
+        tipoSel.addEventListener('change',  apply);
         ordenSel.addEventListener('change', apply);
         apply();
       }
@@ -282,14 +379,13 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
   tbody tr:last-child td { border-bottom: none; }
   tbody tr:hover td { background: #f6fdf9; }
   .col-center { text-align: center; }
-
   .row-hidden { display: none; }
 
-  /* Aseguradora + plan + badges */
+  /* ── Aseguradora ───────────────────────── */
   .aseg { display: flex; flex-direction: column; gap: 0.15rem; }
   .aseg-nombre { font-weight: 700; font-size: 0.98rem; }
   .aseg-plan { font-size: 0.82rem; color: #64748b; }
-  .badges { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.35rem; }
+  .badges { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.25rem; min-height: 1.2rem; }
   .badge {
     font-size: 0.66rem;
     font-weight: 700;
@@ -300,17 +396,40 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
     white-space: nowrap;
   }
   .badge-popular { background: #1a7d53; color: #fff; }
-  .badge-reco { background: #6efac1; color: #0f4c35; }
+  .badge-reco    { background: #6efac1; color: #0f4c35; }
 
-  /* Precio */
+  /* ── Plan selector ─────────────────────── */
+  .plan-selector {
+    margin-top: 0.5rem;
+    appearance: none;
+    -webkit-appearance: none;
+    font-size: 0.76rem;
+    padding: 0.3rem 1.6rem 0.3rem 0.55rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: #f8fafc
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7' fill='none'%3E%3Cpath d='M1 1L5 5.5L9 1' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E")
+      no-repeat right 0.5rem center;
+    color: #374151;
+    cursor: pointer;
+    font-family: inherit;
+    max-width: 100%;
+  }
+  .plan-selector:focus {
+    outline: none;
+    border-color: #1a7d53;
+    box-shadow: 0 0 0 2px rgba(26,125,83,0.15);
+  }
+
+  /* ── Precio ────────────────────────────── */
   .td-precio strong { font-size: 1.02rem; display: block; line-height: 1.2; }
   .moneda { font-size: 0.72rem; color: #94a3b8; }
 
-  /* Iconos cobertura */
+  /* ── Coberturas ────────────────────────── */
   .ico-yes { color: #16a34a; font-weight: 800; font-size: 1.05rem; }
-  .ico-no { color: #dc2626; font-weight: 800; font-size: 1.05rem; }
+  .ico-no  { color: #dc2626; font-weight: 800; font-size: 1.05rem; }
 
-  /* Botón oferta */
+  /* ── Botón oferta ──────────────────────── */
   .btn-oferta {
     display: inline-block;
     padding: 0.5rem 1.1rem;
@@ -341,7 +460,7 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
   }
   .mx-flag { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
   .mx-soon h3 { font-size: 1.2rem; margin-bottom: 0.4rem; color: #0f4c35; }
-  .mx-soon p { color: #64748b; font-size: 0.95rem; max-width: 420px; margin: 0 auto; }
+  .mx-soon p  { color: #64748b; font-size: 0.95rem; max-width: 420px; margin: 0 auto; }
 
   /* ── Sticky columns en mobile ──────────── */
   @media (max-width: 760px) {

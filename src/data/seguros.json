@@ -4,6 +4,7 @@
       "id": "naranja-x-basico",
       "nombre": "Naranja X",
       "plan": "Plan Básico",
+      "grupo": "naranja-x",
       "pais": "AR",
       "tipo": ["perros", "gatos"],
       "precio_mensual": 11400,
@@ -27,6 +28,7 @@
       "id": "naranja-x-premium",
       "nombre": "Naranja X",
       "plan": "Plan Premium",
+      "grupo": "naranja-x",
       "pais": "AR",
       "tipo": ["perros", "gatos"],
       "precio_mensual": 14000,
@@ -73,6 +75,7 @@
       "id": "life-seguros-full",
       "nombre": "Life Seguros",
       "plan": "Plan Full",
+      "grupo": "life-seguros",
       "pais": "AR",
       "tipo": ["perros", "gatos"],
       "precio_mensual": 22168,
@@ -96,6 +99,7 @@
       "id": "life-seguros-senior",
       "nombre": "Life Seguros",
       "plan": "Plan Senior",
+      "grupo": "life-seguros",
       "pais": "AR",
       "tipo": ["perros", "gatos"],
       "precio_mensual": 20200,
@@ -119,6 +123,7 @@
       "id": "fielpet-plan1",
       "nombre": "FielPet",
       "plan": "Plan 1 · $500.000/año",
+      "grupo": "fielpet",
       "pais": "AR",
       "tipo": ["perros", "gatos"],
       "precio_mensual": 19047,
@@ -186,6 +191,7 @@
       "id": "fielpet-plan3",
       "nombre": "FielPet",
       "plan": "Plan 3 · $1.000.000/año",
+      "grupo": "fielpet",
       "pais": "AR",
       "tipo": ["perros", "gatos"],
       "precio_mensual": 36970,
@@ -253,6 +259,7 @@
       "id": "fielpet-plan5",
       "nombre": "FielPet",
       "plan": "Plan 5 · $2.000.000/año",
+      "grupo": "fielpet",
       "pais": "AR",
       "tipo": ["perros", "gatos"],
       "precio_mensual": 72815,
@@ -314,6 +321,291 @@
         "facilidad_info": 5,
         "precios_publicos": true,
         "notas": "Precios base para mascotas de 3m-9a. Escalan por edad: 10-13a $111.104, 13-18a $126.990. Reembolso 100% vía app. RC $5.000.000 en todos los planes. Mayor cobertura del mercado."
+      }
+    },
+    {
+      "id": "qualia-plan1",
+      "nombre": "Qualia Seguros",
+      "plan": "Plan 1",
+      "grupo": "qualia",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 8800,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": true,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": false,
+      "popular": true,
+      "url_afiliado": "https://contrata.qualiaseguros.com.ar/seguro-de-mascotas",
+      "actualizado": "2026-06-18",
+      "aseguradora": "Qualia Seguros",
+      "url_sitio": "https://www.qualiaseguros.com.ar/",
+      "topes_ars": {
+        "gastos_vet_por_evento": 338000,
+        "responsabilidad_civil": 2354000,
+        "fallecimiento_entierro": 59400
+      },
+      "condiciones": {
+        "especies": ["perros", "gatos"],
+        "edad_minima_dias": 45,
+        "edad_maxima_anios": null,
+        "razas_excluidas": [],
+        "carencia_dias": 0,
+        "franquicia_pct": null,
+        "franquicia_monto_ars": null,
+        "preexistentes_excluidas_meses": 6,
+        "cobertura_max_vigencia_anios": 10
+      },
+      "contratacion": {
+        "online_100pct": true,
+        "url_cotizar": "https://contrata.qualiaseguros.com.ar/seguro-de-mascotas",
+        "requiere_revision_medica": false,
+        "medios_pago": ["tarjeta de crédito"]
+      },
+      "red_veterinaria": {
+        "red_propia": false,
+        "reembolso_libre_eleccion": true
+      },
+      "evaluacion": {
+        "facilidad_info": 4,
+        "precios_publicos": true,
+        "notas": "Sin franquicia ni carencia. Reintegro libre elección. Telemedicina 24h. RC ampliada a países limítrofes (90 días/año). Excluye preexistencias primeros 6 meses. Topes Plan 1: Enf/Acc $338.000, RC $2.354.000, Fallecimiento $59.400. 50% reintegro en vacunas, castración, guardería, peluquería, pipetas, traslados."
+      }
+    },
+    {
+      "id": "qualia-plan2",
+      "nombre": "Qualia Seguros",
+      "plan": "Plan 2",
+      "grupo": "qualia",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 13200,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": true,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": false,
+      "popular": false,
+      "url_afiliado": "https://contrata.qualiaseguros.com.ar/seguro-de-mascotas",
+      "actualizado": "2026-06-18",
+      "aseguradora": "Qualia Seguros",
+      "url_sitio": "https://www.qualiaseguros.com.ar/",
+      "topes_ars": {
+        "gastos_vet_por_evento": 507000,
+        "responsabilidad_civil": 3531000,
+        "fallecimiento_entierro": 89100
+      },
+      "condiciones": {
+        "especies": ["perros", "gatos"],
+        "edad_minima_dias": 45,
+        "edad_maxima_anios": null,
+        "razas_excluidas": [],
+        "carencia_dias": 0,
+        "franquicia_pct": null,
+        "franquicia_monto_ars": null,
+        "preexistentes_excluidas_meses": 6,
+        "cobertura_max_vigencia_anios": 10
+      },
+      "contratacion": {
+        "online_100pct": true,
+        "url_cotizar": "https://contrata.qualiaseguros.com.ar/seguro-de-mascotas",
+        "requiere_revision_medica": false,
+        "medios_pago": ["tarjeta de crédito"]
+      },
+      "red_veterinaria": {
+        "red_propia": false,
+        "reembolso_libre_eleccion": true
+      },
+      "evaluacion": {
+        "facilidad_info": 4,
+        "precios_publicos": true,
+        "notas": "Topes Plan 2: Enf/Acc $507.000, RC $3.531.000, Fallecimiento $89.100. Topes extrapolados proporcionalmente desde Plan 1 confirmado."
+      }
+    },
+    {
+      "id": "qualia-plan3",
+      "nombre": "Qualia Seguros",
+      "plan": "Plan 3",
+      "grupo": "qualia",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 17600,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": true,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": true,
+      "popular": false,
+      "url_afiliado": "https://contrata.qualiaseguros.com.ar/seguro-de-mascotas",
+      "actualizado": "2026-06-18",
+      "aseguradora": "Qualia Seguros",
+      "url_sitio": "https://www.qualiaseguros.com.ar/",
+      "topes_ars": {
+        "gastos_vet_por_evento": 676000,
+        "responsabilidad_civil": 4708000,
+        "fallecimiento_entierro": 118800
+      },
+      "condiciones": {
+        "especies": ["perros", "gatos"],
+        "edad_minima_dias": 45,
+        "edad_maxima_anios": null,
+        "razas_excluidas": [],
+        "carencia_dias": 0,
+        "franquicia_pct": null,
+        "franquicia_monto_ars": null,
+        "preexistentes_excluidas_meses": 6,
+        "cobertura_max_vigencia_anios": 10
+      },
+      "contratacion": {
+        "online_100pct": true,
+        "url_cotizar": "https://contrata.qualiaseguros.com.ar/seguro-de-mascotas",
+        "requiere_revision_medica": false,
+        "medios_pago": ["tarjeta de crédito"]
+      },
+      "red_veterinaria": {
+        "red_propia": false,
+        "reembolso_libre_eleccion": true
+      },
+      "evaluacion": {
+        "facilidad_info": 4,
+        "precios_publicos": true,
+        "notas": "Topes Plan 3: Enf/Acc $676.000, RC $4.708.000, Fallecimiento $118.800."
+      }
+    },
+    {
+      "id": "qualia-plan4",
+      "nombre": "Qualia Seguros",
+      "plan": "Plan 4",
+      "grupo": "qualia",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 22000,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": true,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": false,
+      "popular": false,
+      "url_afiliado": "https://contrata.qualiaseguros.com.ar/seguro-de-mascotas",
+      "actualizado": "2026-06-18",
+      "aseguradora": "Qualia Seguros",
+      "url_sitio": "https://www.qualiaseguros.com.ar/",
+      "topes_ars": {
+        "gastos_vet_por_evento": 845000,
+        "responsabilidad_civil": 5885000,
+        "fallecimiento_entierro": 148500
+      },
+      "condiciones": {
+        "especies": ["perros", "gatos"],
+        "edad_minima_dias": 45,
+        "edad_maxima_anios": null,
+        "razas_excluidas": [],
+        "carencia_dias": 0,
+        "franquicia_pct": null,
+        "franquicia_monto_ars": null,
+        "preexistentes_excluidas_meses": 6,
+        "cobertura_max_vigencia_anios": 10
+      },
+      "contratacion": {
+        "online_100pct": true,
+        "url_cotizar": "https://contrata.qualiaseguros.com.ar/seguro-de-mascotas",
+        "requiere_revision_medica": false,
+        "medios_pago": ["tarjeta de crédito"]
+      },
+      "red_veterinaria": {
+        "red_propia": false,
+        "reembolso_libre_eleccion": true
+      },
+      "evaluacion": {
+        "facilidad_info": 4,
+        "precios_publicos": true,
+        "notas": "Topes Plan 4: Enf/Acc $845.000, RC $5.885.000, Fallecimiento $148.500."
+      }
+    },
+    {
+      "id": "qualia-plan5",
+      "nombre": "Qualia Seguros",
+      "plan": "Plan 5",
+      "grupo": "qualia",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 26400,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": true,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": false,
+      "popular": false,
+      "url_afiliado": "https://contrata.qualiaseguros.com.ar/seguro-de-mascotas",
+      "actualizado": "2026-06-18",
+      "aseguradora": "Qualia Seguros",
+      "url_sitio": "https://www.qualiaseguros.com.ar/",
+      "topes_ars": {
+        "gastos_vet_por_evento": 1014000,
+        "responsabilidad_civil": 7062000,
+        "fallecimiento_entierro": 178200
+      },
+      "condiciones": {
+        "especies": ["perros", "gatos"],
+        "edad_minima_dias": 45,
+        "edad_maxima_anios": null,
+        "razas_excluidas": [],
+        "carencia_dias": 0,
+        "franquicia_pct": null,
+        "franquicia_monto_ars": null,
+        "preexistentes_excluidas_meses": 6,
+        "cobertura_max_vigencia_anios": 10
+      },
+      "contratacion": {
+        "online_100pct": true,
+        "url_cotizar": "https://contrata.qualiaseguros.com.ar/seguro-de-mascotas",
+        "requiere_revision_medica": false,
+        "medios_pago": ["tarjeta de crédito"]
+      },
+      "red_veterinaria": {
+        "red_propia": false,
+        "reembolso_libre_eleccion": true
+      },
+      "evaluacion": {
+        "facilidad_info": 4,
+        "precios_publicos": true,
+        "notas": "Topes Plan 5: Enf/Acc $1.014.000, RC $7.062.000, Fallecimiento $178.200."
       }
     }
   ]
