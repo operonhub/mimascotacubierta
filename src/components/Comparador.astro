@@ -27,9 +27,9 @@ for (const s of sorted) {
 // All groups sorted by cheapest plan in group
 let groups = Array.from(groupMap.values());
 
-// Preview: 3 cheapest AR groups; Full: all groups
+// Preview: all AR groups (no filter UI); Full: all groups
 if (mode === 'preview') {
-  groups = groups.filter((g) => g[0].pais === 'AR').slice(0, 3);
+  groups = groups.filter((g) => g[0].pais === 'AR');
 }
 
 // Fecha de última actualización
