@@ -1,16 +1,16 @@
 {
   "seguros": [
     {
-      "id": "naranja-x-basico",
+      "id": "naranja-x-basico-1",
       "nombre": "Naranja X",
-      "plan": "Plan Básico",
+      "plan": "Plan Básico · 1 mascota",
       "grupo": "naranja-x",
       "pais": "AR",
       "tipo": ["perros", "gatos"],
       "precio_mensual": 11400,
       "moneda": "ARS",
       "coberturas": {
-        "consultas": true,
+        "consultas": false,
         "urgencias": true,
         "cirugia": false,
         "hospitalizacion": false,
@@ -21,13 +21,13 @@
       },
       "destacado": false,
       "popular": true,
-      "url_afiliado": "#",
-      "actualizado": "2026-06-08"
+      "url_afiliado": "https://cotizatuseguro.naranjax.com/mascota/cotizador?source=NOL",
+      "actualizado": "2026-06-18"
     },
     {
-      "id": "naranja-x-premium",
+      "id": "naranja-x-premium-1",
       "nombre": "Naranja X",
-      "plan": "Plan Premium",
+      "plan": "Plan Premium · 1 mascota",
       "grupo": "naranja-x",
       "pais": "AR",
       "tipo": ["perros", "gatos"],
@@ -43,10 +43,58 @@
         "responsabilidad_civil": false,
         "vacunas": false
       },
+      "destacado": true,
+      "popular": false,
+      "url_afiliado": "https://cotizatuseguro.naranjax.com/mascota/cotizador?source=NOL",
+      "actualizado": "2026-06-18"
+    },
+    {
+      "id": "naranja-x-basico-2",
+      "nombre": "Naranja X",
+      "plan": "Plan Básico · 2 mascotas",
+      "grupo": "naranja-x",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 17500,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": false,
+        "hospitalizacion": false,
+        "guarderia": false,
+        "extravio": true,
+        "responsabilidad_civil": false,
+        "vacunas": false
+      },
       "destacado": false,
       "popular": false,
-      "url_afiliado": "#",
-      "actualizado": "2026-06-08"
+      "url_afiliado": "https://cotizatuseguro.naranjax.com/mascota/cotizador?source=NOL",
+      "actualizado": "2026-06-18"
+    },
+    {
+      "id": "naranja-x-premium-2",
+      "nombre": "Naranja X",
+      "plan": "Plan Premium · 2 mascotas",
+      "grupo": "naranja-x",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 24900,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": false,
+        "hospitalizacion": false,
+        "guarderia": true,
+        "extravio": true,
+        "responsabilidad_civil": false,
+        "vacunas": false
+      },
+      "destacado": false,
+      "popular": false,
+      "url_afiliado": "https://cotizatuseguro.naranjax.com/mascota/cotizador?source=NOL",
+      "actualizado": "2026-06-18"
     },
     {
       "id": "hipotecario-basico",
