@@ -97,27 +97,76 @@
       "actualizado": "2026-06-18"
     },
     {
-      "id": "hipotecario-basico",
+      "id": "hipotecario-plan1",
       "nombre": "Banco Hipotecario",
-      "plan": "Plan Básico",
+      "plan": "Plan 1",
+      "grupo": "hipotecario",
       "pais": "AR",
       "tipo": ["perros", "gatos"],
       "precio_mensual": 12233,
       "moneda": "ARS",
       "coberturas": {
-        "consultas": false,
-        "urgencias": false,
-        "cirugia": false,
-        "hospitalizacion": false,
-        "guarderia": false,
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": true,
         "extravio": true,
         "responsabilidad_civil": true,
-        "vacunas": false
+        "vacunas": true
+      },
+      "destacado": false,
+      "popular": true,
+      "url_afiliado": "https://www.hipotecario.com.ar/personas/seguros/seguro-para-mascotas/",
+      "actualizado": "2026-06-18"
+    },
+    {
+      "id": "hipotecario-plan2",
+      "nombre": "Banco Hipotecario",
+      "plan": "Plan 2",
+      "grupo": "hipotecario",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 15728,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": true,
+        "extravio": true,
+        "responsabilidad_civil": true,
+        "vacunas": true
       },
       "destacado": false,
       "popular": false,
-      "url_afiliado": "#",
-      "actualizado": "2026-06-08"
+      "url_afiliado": "https://www.hipotecario.com.ar/personas/seguros/seguro-para-mascotas/",
+      "actualizado": "2026-06-18"
+    },
+    {
+      "id": "hipotecario-plan3",
+      "nombre": "Banco Hipotecario",
+      "plan": "Plan 3",
+      "grupo": "hipotecario",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 17476,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": true,
+        "extravio": true,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": true,
+      "popular": false,
+      "url_afiliado": "https://www.hipotecario.com.ar/personas/seguros/seguro-para-mascotas/",
+      "actualizado": "2026-06-18"
     },
     {
       "id": "life-seguros-full",
