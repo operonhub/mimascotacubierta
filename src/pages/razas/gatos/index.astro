@@ -1,19 +1,15 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import { categorias } from '../../../data/categorias';
+import { getCollection } from 'astro:content';
 
 const cat = categorias.find((c) => c.slug === 'razas')!;
 
-const breeds = [
-  { emoji: '🐈', nombre: 'Persa', desc: 'Problemas oculares y respiratorios', slug: 'persa' },
-  { emoji: '🐈', nombre: 'Siamés', desc: 'Predisposición a problemas dentales y respiratorios', slug: 'siames' },
-  { emoji: '🐈', nombre: 'Maine Coon', desc: 'Cardiomiopatía hipertrófica', slug: 'maine-coon' },
-  { emoji: '🐈', nombre: 'Ragdoll', desc: 'Problemas cardíacos hereditarios', slug: 'ragdoll' },
-  { emoji: '🐈', nombre: 'Bengalí', desc: 'Enfermedades digestivas y cardíacas', slug: 'bengali' },
-  { emoji: '🐈', nombre: 'Abisinio', desc: 'Amiloidosis renal', slug: 'abisinio' },
-  { emoji: '🐈', nombre: 'Sphynx', desc: 'Problemas cardíacos y de piel', slug: 'sphynx' },
-  { emoji: '🐈', nombre: 'Británico de Pelo Corto', desc: 'Obesidad y problemas cardíacos', slug: 'britanico-pelo-corto' },
-];
+const allArticles = await getCollection(
+  'blog',
+  ({ data, id }) => !data.draft && id.startsWith('razas/gatos/'),
+);
+const breeds = allArticles.sort((a, b) => a.data.title.localeCompare(b.data.title, 'es'));
 ---
 
 <Layout
@@ -57,14 +53,22 @@ const breeds = [
   <section class="breeds">
     <div class="container">
       <div class="breed-grid">
-        {breeds.map((b) => (
-          <a class="breed-card" href={`/razas/gatos/${b.slug}/`}>
-            <span class="breed-emoji" aria-hidden="true">{b.emoji}</span>
-            <h2>{b.nombre}</h2>
-            <p>{b.desc}</p>
-            <span class="breed-link">Ver guía →</span>
-          </a>
-        ))}
+        {breeds.length > 0 ? (
+          breeds.map((article) => (
+            <a class="breed-card" href={`/${article.id}/`}>
+              <span class="breed-emoji" aria-hidden="true">🐈</span>
+              <h2>{article.data.title}</h2>
+              <p>{article.data.description}</p>
+              <span class="breed-link">Ver guía →</span>
+            </a>
+          ))
+        ) : (
+          <div class="empty-state">
+            <span class="empty-emoji" aria-hidden="true">🐈</span>
+            <h2>Próximamente</h2>
+            <p>Estamos preparando las guías por raza. Volvé pronto.</p>
+          </div>
+        )}
       </div>
     </div>
   </section>
@@ -151,6 +155,19 @@ const breeds = [
   .breed-card h2 { font-size: 1.1rem; color: #0f4c35; margin-bottom: 0.4rem; }
   .breed-card p { color: #64748b; font-size: 0.88rem; line-height: 1.55; margin-bottom: 0.9rem; }
   .breed-link { font-size: 0.88rem; font-weight: 700; color: #1a7d53; }
+
+  /* Empty state */
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    border: 2px dashed #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+  }
+  .empty-emoji { font-size: 3rem; display: block; margin-bottom: 0.75rem; line-height: 1; }
+  .empty-state h2 { font-size: 1.3rem; color: #0f4c35; margin-bottom: 0.5rem; }
+  .empty-state p { color: #64748b; font-size: 0.95rem; max-width: 380px; margin: 0 auto; }
 
   /* D) CTA */
   .cat-cta { padding: 0 0 4rem; background: #fff; }
