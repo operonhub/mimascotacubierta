@@ -600,6 +600,78 @@
       }
     },
     {
+      "id": "holavet-basico",
+      "nombre": "HolaVet",
+      "plan": "Plan Básico",
+      "grupo": "holavet",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 36068,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": true,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": false,
+      "popular": true,
+      "url_afiliado": "https://holavet.com.ar/onbording-planes/#",
+      "actualizado": "2026-06-18"
+    },
+    {
+      "id": "holavet-preferido",
+      "nombre": "HolaVet",
+      "plan": "Plan Preferido",
+      "grupo": "holavet",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 43281,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": true,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": false,
+      "popular": false,
+      "url_afiliado": "https://holavet.com.ar/onbording-planes/#",
+      "actualizado": "2026-06-18"
+    },
+    {
+      "id": "holavet-full",
+      "nombre": "HolaVet",
+      "plan": "Plan Full",
+      "grupo": "holavet",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 48090,
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": true,
+        "guarderia": true,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": true
+      },
+      "destacado": true,
+      "popular": false,
+      "url_afiliado": "https://holavet.com.ar/onbording-planes/#",
+      "actualizado": "2026-06-18"
+    },
+    {
       "id": "qualia-plan5",
       "nombre": "Qualia Seguros",
       "plan": "Plan 5",
