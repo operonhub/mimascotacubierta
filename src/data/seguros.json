@@ -169,54 +169,6 @@
       "actualizado": "2026-06-18"
     },
     {
-      "id": "life-seguros-full",
-      "nombre": "Life Seguros",
-      "plan": "Plan Full",
-      "grupo": "life-seguros",
-      "pais": "AR",
-      "tipo": ["perros", "gatos"],
-      "precio_mensual": 22168,
-      "moneda": "ARS",
-      "coberturas": {
-        "consultas": false,
-        "urgencias": false,
-        "cirugia": false,
-        "hospitalizacion": false,
-        "guarderia": false,
-        "extravio": true,
-        "responsabilidad_civil": true,
-        "vacunas": true
-      },
-      "destacado": true,
-      "popular": false,
-      "url_afiliado": "#",
-      "actualizado": "2026-06-08"
-    },
-    {
-      "id": "life-seguros-senior",
-      "nombre": "Life Seguros",
-      "plan": "Plan Senior",
-      "grupo": "life-seguros",
-      "pais": "AR",
-      "tipo": ["perros", "gatos"],
-      "precio_mensual": 20200,
-      "moneda": "ARS",
-      "coberturas": {
-        "consultas": false,
-        "urgencias": false,
-        "cirugia": false,
-        "hospitalizacion": false,
-        "guarderia": false,
-        "extravio": true,
-        "responsabilidad_civil": true,
-        "vacunas": true
-      },
-      "destacado": false,
-      "popular": false,
-      "url_afiliado": "#",
-      "actualizado": "2026-06-08"
-    },
-    {
       "id": "fielpet-plan1",
       "nombre": "FielPet",
       "plan": "Plan 1 · $500.000/año",
