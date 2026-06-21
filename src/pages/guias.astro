@@ -1,0 +1,202 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import { categorias } from '../data/categorias';
+
+const allArticles = await getCollection('blog', ({ data }) => !data.draft);
+const sorted = allArticles.sort(
+  (a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+
+// Solo categorías que tienen al menos un artículo publicado
+const usedSlugs = new Set(sorted.map((a) => a.data.categorySlug));
+const cats = categorias.filter((c) => usedSlugs.has(c.slug));
+---
+
+<Layout
+  title="Todas las guías para mascotas | MiMascotaCubierta.com"
+  description="Guías, comparativas y artículos sobre seguros, gastos veterinarios, salud y cuidados para perros y gatos en Argentina y México."
+>
+  <!-- ─── HERO ──────────────────────────────────────────── -->
+  <section class="gh-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Migas de pan">
+        <a href="/">Home</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <span>Todas las guías</span>
+      </nav>
+      <h1>Todas las guías</h1>
+      <p>
+        {sorted.length} artículos sobre seguros, gastos veterinarios, salud y cuidados
+        para perros y gatos en Argentina y México.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── FILTROS ──────────────────────────────────────── -->
+  <section class="gh-filtros">
+    <div class="container">
+      <div class="filter-tabs" role="group" aria-label="Filtrar por categoría">
+        <button class="tab active" data-filter="todos" aria-pressed="true">
+          Todas ({sorted.length})
+        </button>
+        {cats.map((cat) => {
+          const count = sorted.filter((a) => a.data.categorySlug === cat.slug).length;
+          return (
+            <button class="tab" data-filter={cat.slug} aria-pressed="false">
+              {cat.emoji} {cat.nombre} ({count})
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ARTÍCULOS ────────────────────────────────────── -->
+  <section class="gh-articles">
+    <div class="container">
+      <div class="art-grid" id="guias-grid">
+        {sorted.map((article) => (
+          <div class="art-wrap" data-cat={article.data.categorySlug}>
+            <ArticleCard
+              title={article.data.title}
+              category={article.data.category}
+              pubDate={article.data.pubDate}
+              href={`/${article.id}/`}
+              image={article.data.image}
+              imageAlt={article.data.imageAlt}
+            />
+          </div>
+        ))}
+      </div>
+      <p class="empty-msg" id="guias-empty" hidden>
+        No hay artículos en esta categoría todavía.
+      </p>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const tabs  = document.querySelectorAll<HTMLButtonElement>('.tab');
+  const wraps = document.querySelectorAll<HTMLElement>('.art-wrap');
+  const empty = document.getElementById('guias-empty');
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const filter = tab.dataset.filter!;
+
+      tabs.forEach((t) => {
+        t.classList.remove('active');
+        t.setAttribute('aria-pressed', 'false');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-pressed', 'true');
+
+      let visible = 0;
+      wraps.forEach((w) => {
+        const show = filter === 'todos' || w.dataset.cat === filter;
+        w.hidden = !show;
+        if (show) visible++;
+      });
+
+      if (empty) empty.hidden = visible > 0;
+    });
+  });
+</script>
+
+<style>
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* ── Hero ──────────────────────────────── */
+  .gh-hero {
+    background: #0f4c35;
+    color: #fff;
+    padding: 3rem 0 2.5rem;
+  }
+  .breadcrumb {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 1.25rem;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .breadcrumb a { color: rgba(255,255,255,0.7); text-decoration: none; }
+  .breadcrumb a:hover { color: #fff; text-decoration: underline; }
+  .breadcrumb .sep { color: rgba(255,255,255,0.35); }
+  .gh-hero h1 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 0.75rem;
+    line-height: 1.1;
+  }
+  .gh-hero p {
+    color: rgba(255,255,255,0.82);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 640px;
+  }
+
+  /* ── Filtros ───────────────────────────── */
+  .gh-filtros {
+    background: #fff;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .filter-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .tab {
+    appearance: none;
+    background: #f1f5f9;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 0.45rem 1rem;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .tab:hover {
+    background: #e2e8f0;
+    color: #1a1d23;
+  }
+  .tab.active {
+    background: #0f4c35;
+    color: #fff;
+    border-color: #0f4c35;
+  }
+
+  /* ── Artículos ─────────────────────────── */
+  .gh-articles { padding: 3rem 0 5rem; background: #f8fafc; }
+  .art-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .empty-msg {
+    text-align: center;
+    color: #94a3b8;
+    padding: 3rem 0;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 768px) {
+    .gh-hero  { padding: 2.5rem 0 2rem; }
+    .gh-filtros { position: static; }
+    .filter-tabs { gap: 0.4rem; }
+    .tab { font-size: 0.78rem; padding: 0.38rem 0.85rem; }
+  }
+</style>
