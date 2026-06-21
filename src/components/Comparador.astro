@@ -103,7 +103,7 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
         </tr>
       </thead>
       <tbody>
-        {groups.map((grupo) => {
+        {groups.map((grupo, grupoIdx) => {
           const first = grupo[0];
           const isMulti = grupo.length > 1;
           const planesData = isMulti
@@ -112,8 +112,8 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
                 precio_mensual: s.precio_mensual,
                 moneda: s.moneda,
                 url_afiliado: s.url_afiliado,
-                popular: s.popular,
                 destacado: s.destacado,
+                precio_nota: (s as any).precio_nota ?? null,
                 coberturas: Object.fromEntries(
                   cobCols.map((c) => [c.key, s.coberturas[c.key]])
                 ),
@@ -133,7 +133,7 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
                   <span class="aseg-nombre">{first.nombre}</span>
                   <span class="aseg-plan js-plan-label">{first.plan}</span>
                   <span class="badges js-badges">
-                    {first.popular   && <span class="badge badge-popular">Más popular</span>}
+                    {grupoIdx === 0  && <span class="badge badge-popular">Mejor precio</span>}
                     {first.destacado && <span class="badge badge-reco">Recomendado</span>}
                   </span>
                   {isMulti && (
@@ -260,21 +260,31 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
             const planLabel = tr.querySelector('.js-plan-label');
             if (planLabel) planLabel.textContent = plan.plan;
 
-            // Cobertura checkmarks
+            // Cobertura checkmarks — resaltar celdas que cambian
             Object.entries(plan.coberturas).forEach(([key, val]) => {
               const span = tr.querySelector<HTMLElement>(`.js-cob-${key}`);
               if (!span) return;
+              const changed = span.classList.contains(val ? 'ico-no' : 'ico-yes');
               span.className   = (val ? 'ico-yes' : 'ico-no') + ` js-cob js-cob-${key}`;
               span.textContent = val ? '✓' : '✗';
               span.setAttribute('aria-label', val ? 'Incluido' : 'No incluido');
+              if (changed) {
+                const td = span.closest('td');
+                if (td) {
+                  td.classList.remove('cell-changed');
+                  void (td as HTMLElement).offsetWidth;
+                  td.classList.add('cell-changed');
+                }
+              }
             });
 
-            // Badges — usar createElement para evitar XSS
+            // Badges — solo "Recomendado" cuando corresponde
             const badges = tr.querySelector('.js-badges');
             if (badges) {
+              // Preservar "Mejor precio" si existe (es estático, del primer grupo)
+              const mejorPrecioEl = badges.querySelector('.badge-popular');
               while (badges.firstChild) badges.removeChild(badges.firstChild);
-              if (plan.popular)
-                badges.appendChild(makeBadge('badge badge-popular', 'Más popular'));
+              if (mejorPrecioEl) badges.appendChild(mejorPrecioEl);
               if (plan.destacado)
                 badges.appendChild(makeBadge('badge badge-reco', 'Recomendado'));
             }
@@ -282,8 +292,8 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
             // Nota de precio referencial
             const notaEl = tr.querySelector<HTMLElement>('.js-precio-nota');
             if (notaEl) {
-              if ((plan as any).precio_nota) {
-                notaEl.textContent = (plan as any).precio_nota;
+              if (plan.precio_nota) {
+                notaEl.textContent = plan.precio_nota;
                 notaEl.style.display = '';
               } else {
                 notaEl.style.display = 'none';
@@ -296,6 +306,11 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
 
             // Actualizar data-precio para re-sort correcto
             tr.dataset.precio = String(plan.precio_mensual);
+
+            // Flash en la fila completa
+            tr.classList.remove('row-updated');
+            void tr.offsetWidth;
+            tr.classList.add('row-updated');
           });
         });
 
@@ -394,6 +409,17 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
   tbody tr:hover td { background: #f6fdf9; }
   .col-center { text-align: center; }
   .row-hidden { display: none; }
+
+  @keyframes row-flash {
+    0%   { background: rgba(26,125,83,0.07); }
+    100% { background: transparent; }
+  }
+  @keyframes cell-flash {
+    0%   { background: rgba(26,125,83,0.18); }
+    100% { background: transparent; }
+  }
+  .row-updated td        { animation: row-flash  0.45s ease-out; }
+  .cell-changed          { animation: cell-flash 0.55s ease-out; }
 
   /* ── Aseguradora ───────────────────────── */
   .aseg { display: flex; flex-direction: column; gap: 0.15rem; }
