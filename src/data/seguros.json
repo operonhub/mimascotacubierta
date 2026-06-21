@@ -11,14 +11,14 @@
       "precio_nota": "Referencial: Labrador Retriever 2 años. Varía por raza y edad.",
       "moneda": "ARS",
       "coberturas": {
-        "consultas": false,
+        "consultas": true,
         "urgencias": true,
         "cirugia": false,
         "hospitalizacion": false,
         "guarderia": true,
         "extravio": false,
         "responsabilidad_civil": true,
-        "vacunas": false
+        "vacunas": true
       },
       "destacado": false,
       "popular": false,
@@ -43,7 +43,7 @@
         "guarderia": true,
         "extravio": false,
         "responsabilidad_civil": true,
-        "vacunas": false
+        "vacunas": true
       },
       "destacado": false,
       "popular": true,
@@ -68,7 +68,7 @@
         "guarderia": true,
         "extravio": false,
         "responsabilidad_civil": true,
-        "vacunas": false
+        "vacunas": true
       },
       "destacado": true,
       "popular": false,
