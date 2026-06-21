@@ -13,11 +13,20 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 
-// Tiempo de lectura ≈ 200 palabras por minuto, calculado del cuerpo crudo
-const words = (post.body ?? '').trim().split(/\s+/).filter(Boolean).length;
-const readingTime = Math.max(1, Math.round(words / 200));
+// Astro 6 Content Layer: post.body is undefined for MDX files.
+// import.meta.glob with ?raw gives the raw file string at build time.
+const rawFiles = import.meta.glob<string>('/src/content/blog/**', { query: '?raw', import: 'default' });
+const rawKey = Object.keys(rawFiles).find((k) => k.includes(`/${post.id}.`));
+const rawContent = rawKey ? await rawFiles[rawKey]() : (post.body ?? '');
+// Strip YAML frontmatter and MDX import statements before counting
+const bodyText = rawContent
+  .replace(/^---[\s\S]*?---/, '')
+  .replace(/^import\s.+$/gm, '')
+  .trim();
+const wordCount = bodyText.split(/\s+/).filter(Boolean).length;
+const readingTime = Math.max(1, Math.round(wordCount / 200));
 ---
 
-<ArticleLayout {...post.data} readingTime={readingTime}>
+<ArticleLayout {...post.data} readingTime={readingTime} articleId={post.id}>
   <Content />
 </ArticleLayout>

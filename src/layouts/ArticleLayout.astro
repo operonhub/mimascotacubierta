@@ -1,6 +1,7 @@
 ---
 import Layout from './Layout.astro';
 import segurosData from '../data/seguros.json';
+import { getCollection } from 'astro:content';
 
 interface FaqItem {
   question: string;
@@ -19,6 +20,7 @@ interface Props {
   readingTime?: number;
   tags?: string[];
   faq?: FaqItem[];
+  articleId?: string;
 }
 
 const {
@@ -32,6 +34,7 @@ const {
   imageAlt,
   readingTime = 1,
   faq = [],
+  articleId = '',
 } = Astro.props;
 
 // Fecha en formato DD/MM/YYYY (UTC para no correr el día por zona horaria)
@@ -87,29 +90,23 @@ const faqSchema =
       }
     : null;
 
-const relatedSidebar = [
-  { label: '¿Cuánto cuesta una consulta veterinaria?', href: '/gastos-veterinarios' },
-  { label: 'Los mejores seguros para perros en Argentina', href: '/seguros-mascotas' },
-  { label: 'Enfermedades frecuentes en perros adultos', href: '/salud-enfermedades' },
-];
+// Artículos relacionados dinámicos — excluyendo el actual, ordenados por fecha
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const others = allPosts
+  .filter((a) => a.id !== articleId)
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
 
+// Sidebar: primero los de otra categoría (amplía temáticamente), luego misma categoría
+const sidebarArticles = [
+  ...others.filter((a) => a.data.categorySlug !== categorySlug),
+  ...others.filter((a) => a.data.categorySlug === categorySlug),
+].slice(0, 3);
+
+// "Seguí leyendo": primero misma categoría (más relevante), luego otras
 const relatedBottom = [
-  {
-    cat: 'Gastos veterinarios',
-    title: '¿Cuánto cuesta una consulta veterinaria en 2026?',
-    href: '/gastos-veterinarios',
-  },
-  {
-    cat: 'Seguros',
-    title: 'Los 5 mejores seguros para perros en Argentina',
-    href: '/seguros-mascotas',
-  },
-  {
-    cat: 'Salud',
-    title: 'Enfermedades más comunes en perros adultos',
-    href: '/salud-enfermedades',
-  },
-];
+  ...others.filter((a) => a.data.categorySlug === categorySlug),
+  ...others.filter((a) => a.data.categorySlug !== categorySlug),
+].slice(0, 3);
 ---
 
 <Layout title={title} description={description}>
@@ -223,16 +220,20 @@ const relatedBottom = [
         </div>
 
         <!-- Bloque 2: artículos relacionados -->
-        <div class="side-card">
-          <h3 class="side-title">También te puede interesar</h3>
-          <ul class="rel-list">
-            {relatedSidebar.map((r) => (
-              <li>
-                <a href={r.href}><span class="arrow" aria-hidden="true">›</span>{r.label}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {sidebarArticles.length > 0 && (
+          <div class="side-card">
+            <h3 class="side-title">También te puede interesar</h3>
+            <ul class="rel-list">
+              {sidebarArticles.map((a) => (
+                <li>
+                  <a href={`/${a.id}/`}>
+                    <span class="arrow" aria-hidden="true">›</span>{a.data.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <!-- Bloque 3: trust badge -->
         <div class="trust-badge">
@@ -244,21 +245,34 @@ const relatedBottom = [
     </div>
 
     <!-- ─── SEGUÍ LEYENDO ─────────────────────────────── -->
-    <section class="segui-leyendo">
-      <h2>Seguí leyendo</h2>
-      <div class="rel-grid">
-        {relatedBottom.map((r) => (
-          <a class="rel-card" href={r.href}>
-            <div class="rel-img" aria-hidden="true"></div>
-            <div class="rel-body">
-              <span class="rel-cat">{r.cat}</span>
-              <h3>{r.title}</h3>
-              <span class="rel-readmore">Leer artículo →</span>
-            </div>
-          </a>
-        ))}
-      </div>
-    </section>
+    {relatedBottom.length > 0 && (
+      <section class="segui-leyendo">
+        <h2>Seguí leyendo</h2>
+        <div class="rel-grid">
+          {relatedBottom.map((a) => (
+            <a class="rel-card" href={`/${a.id}/`}>
+              {a.data.image ? (
+                <img
+                  class="rel-img"
+                  src={a.data.image}
+                  alt={a.data.imageAlt ?? a.data.title}
+                  width="400"
+                  height="225"
+                  loading="lazy"
+                />
+              ) : (
+                <div class="rel-img rel-img-placeholder" aria-hidden="true" />
+              )}
+              <div class="rel-body">
+                <span class="rel-cat">{a.data.category}</span>
+                <h3>{a.data.title}</h3>
+                <span class="rel-readmore">Leer artículo →</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
   </div>
 </Layout>
 
@@ -603,6 +617,10 @@ const relatedBottom = [
   .rel-img {
     width: 100%;
     aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+  .rel-img-placeholder {
     background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
   }
   .rel-body { padding: 1.1rem 1.1rem 1.35rem; }
