@@ -148,6 +148,9 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
               <td class="td-precio">
                 <strong class="js-precio">${fmtPrice(first.precio_mensual)}</strong>
                 <span class="moneda js-moneda">{first.moneda}/mes</span>
+                {(first as any).precio_nota && (
+                  <span class="precio-nota js-precio-nota">{(first as any).precio_nota}</span>
+                )}
               </td>
               {cobCols.map((c) => (
                 <td class="col-center">
@@ -274,6 +277,17 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
                 badges.appendChild(makeBadge('badge badge-popular', 'Más popular'));
               if (plan.destacado)
                 badges.appendChild(makeBadge('badge badge-reco', 'Recomendado'));
+            }
+
+            // Nota de precio referencial
+            const notaEl = tr.querySelector<HTMLElement>('.js-precio-nota');
+            if (notaEl) {
+              if ((plan as any).precio_nota) {
+                notaEl.textContent = (plan as any).precio_nota;
+                notaEl.style.display = '';
+              } else {
+                notaEl.style.display = 'none';
+              }
             }
 
             // Botón URL
@@ -424,6 +438,7 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
   /* ── Precio ────────────────────────────── */
   .td-precio strong { font-size: 1.02rem; display: block; line-height: 1.2; }
   .moneda { font-size: 0.72rem; color: #94a3b8; }
+  .precio-nota { display: block; font-size: 0.65rem; color: #94a3b8; line-height: 1.3; margin-top: 0.25rem; font-style: italic; }
 
   /* ── Coberturas ────────────────────────── */
   .ico-yes { color: #16a34a; font-weight: 800; font-size: 1.05rem; }

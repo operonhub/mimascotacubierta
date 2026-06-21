@@ -1,6 +1,81 @@
 {
   "seguros": [
     {
+      "id": "bbva-accidente",
+      "nombre": "BBVA Seguros",
+      "plan": "Plan Accidente",
+      "grupo": "bbva",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 5246,
+      "precio_nota": "Referencial: Labrador Retriever 2 años. Varía por raza y edad.",
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": false,
+        "urgencias": true,
+        "cirugia": false,
+        "hospitalizacion": false,
+        "guarderia": true,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": false
+      },
+      "destacado": false,
+      "popular": false,
+      "url_afiliado": "https://www.bbvaseguros.com.ar",
+      "actualizado": "2026-06-21"
+    },
+    {
+      "id": "bbva-basico",
+      "nombre": "BBVA Seguros",
+      "plan": "Plan Básico",
+      "grupo": "bbva",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 10242,
+      "precio_nota": "Referencial: Labrador Retriever 2 años. Varía por raza y edad.",
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": false,
+        "guarderia": true,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": false
+      },
+      "destacado": false,
+      "popular": true,
+      "url_afiliado": "https://www.bbvaseguros.com.ar",
+      "actualizado": "2026-06-21"
+    },
+    {
+      "id": "bbva-premium",
+      "nombre": "BBVA Seguros",
+      "plan": "Plan Premium",
+      "grupo": "bbva",
+      "pais": "AR",
+      "tipo": ["perros", "gatos"],
+      "precio_mensual": 16180,
+      "precio_nota": "Referencial: Labrador Retriever 2 años. Varía por raza y edad.",
+      "moneda": "ARS",
+      "coberturas": {
+        "consultas": true,
+        "urgencias": true,
+        "cirugia": true,
+        "hospitalizacion": false,
+        "guarderia": true,
+        "extravio": false,
+        "responsabilidad_civil": true,
+        "vacunas": false
+      },
+      "destacado": true,
+      "popular": false,
+      "url_afiliado": "https://www.bbvaseguros.com.ar",
+      "actualizado": "2026-06-21"
+    },
+    {
       "id": "naranja-x-basico-1",
       "nombre": "Naranja X",
       "plan": "Plan Básico · 1 mascota",
