@@ -153,7 +153,7 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
                 )}
               </td>
               {cobCols.map((c) => (
-                <td class="col-center">
+                <td class="col-center col-cob" data-label={c.label}>
                   {first.coberturas[c.key] ? (
                     <span class={`ico-yes js-cob js-cob-${c.key}`} aria-label="Incluido">✓</span>
                   ) : (
@@ -503,25 +503,74 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
   .mx-soon h3 { font-size: 1.2rem; margin-bottom: 0.4rem; color: #0f4c35; }
   .mx-soon p  { color: #64748b; font-size: 0.95rem; max-width: 420px; margin: 0 auto; }
 
-  /* ── Sticky columns en mobile ──────────── */
+  /* ── Mobile: reflow tabla → tarjetas ───── */
   @media (max-width: 760px) {
-    .col-sticky-left {
-      position: sticky;
-      left: 0;
-      z-index: 2;
-      background: #fff;
-      box-shadow: 2px 0 6px rgba(0,0,0,0.04);
+    /* El wrap deja de scrollear: las filas se apilan */
+    .table-wrap {
+      overflow-x: visible;
+      border: none;
+      border-radius: 0;
     }
-    thead .col-sticky-left { background: #f8fafc; }
-    .col-sticky-right {
-      position: sticky;
-      right: 0;
-      z-index: 2;
+    table { min-width: 0; width: 100%; }
+    thead { display: none; }
+    tbody { display: block; }
+
+    /* Cada fila es una tarjeta */
+    tbody tr {
+      display: block;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
       background: #fff;
-      box-shadow: -2px 0 6px rgba(0,0,0,0.04);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
-    thead .col-sticky-right { background: #f8fafc; }
-    tbody tr:hover .col-sticky-left,
-    tbody tr:hover .col-sticky-right { background: #f6fdf9; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: transparent; }
+
+    td {
+      display: block;
+      border-bottom: none;
+      padding: 0;
+    }
+
+    /* Nombre + plan + badges + selector */
+    .td-name { margin-bottom: 0.85rem; }
+    .aseg-nombre { font-size: 1.1rem; }
+    .plan-selector { width: 100%; margin-top: 0.65rem; }
+
+    /* Precio destacado, con separador inferior */
+    .td-precio {
+      padding-bottom: 0.85rem;
+      margin-bottom: 0.85rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .td-precio strong { font-size: 1.5rem; }
+    .moneda { font-size: 0.8rem; }
+
+    /* Coberturas: etiqueta a la izquierda, ✓/✗ a la derecha */
+    td.col-cob {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    td.col-cob::before {
+      content: attr(data-label);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #475569;
+    }
+
+    /* Botón a todo el ancho */
+    .col-sticky-right { margin-top: 1.1rem; }
+    .col-sticky-right .btn-oferta {
+      display: block;
+      text-align: center;
+      padding: 0.85rem;
+      font-size: 0.95rem;
+    }
   }
 </style>
