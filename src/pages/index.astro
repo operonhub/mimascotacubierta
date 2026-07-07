@@ -140,6 +140,52 @@ const sorted = recentArticles
     </div>
   </section>
 
+  <!-- ─── GUÍA / CONTENIDO SEO ─────────────────────────────── -->
+  <section class="guia-intro">
+    <div class="container container-narrow">
+      <h2>Cómo elegir un seguro para tu mascota</h2>
+      <p>
+        Contratar un seguro para tu perro o gato es una de las decisiones más
+        inteligentes que podés tomar como dueño responsable. Una cirugía de
+        urgencia o el tratamiento de una enfermedad crónica pueden costar cientos
+        de miles de pesos de un día para el otro, y un buen plan transforma ese
+        gasto imprevisible en una cuota fija y predecible. La clave está en elegir
+        la cobertura correcta según la edad, la raza y el estilo de vida de tu
+        mascota.
+      </p>
+
+      <h3>Mirá la cobertura, no solo el precio</h3>
+      <p>
+        El plan más barato no siempre es el más conveniente. Antes de contratar,
+        revisá qué incluye realmente cada opción: consultas veterinarias,
+        urgencias, cirugías, hospitalización, vacunación y responsabilidad civil.
+        Dos planes con precios parecidos pueden tener coberturas muy distintas, y
+        esa diferencia se nota justo cuando más lo necesitás. Nuestro comparador te
+        muestra en una sola pantalla qué cubre cada aseguradora, sin letra chica.
+      </p>
+
+      <h3>Contratá cuando tu mascota está sana</h3>
+      <p>
+        Casi todas las aseguradoras excluyen las enfermedades preexistentes y
+        aplican períodos de carencia antes de activar algunas coberturas. Por eso,
+        el mejor momento para contratar es cuando tu perro o gato está joven y
+        saludable: pagás menos y accedés a la protección completa desde el
+        principio. Si tu mascota ya es adulta, igual conviene asegurarla, aunque
+        conviene comparar con más cuidado las condiciones de cada póliza.
+      </p>
+
+      <h3>Compará antes de decidir</h3>
+      <p>
+        Relevamos los seguros de mascotas disponibles en Argentina y México con
+        precios reales y coberturas verificadas. No trabajamos para ninguna
+        aseguradora en particular: mostramos todas las opciones para que elijas con
+        información objetiva. Usá el comparador de arriba para ver los planes lado a
+        lado y leé nuestras guías si querés entender en profundidad cada cobertura
+        antes de dar el paso.
+      </p>
+    </div>
+  </section>
+
   <!-- ─── ÚLTIMOS ARTÍCULOS ────────────────────────────────── -->
   <section class="articulos">
     <div class="container">
@@ -180,6 +226,31 @@ const sorted = recentArticles
 .section-cta {
   text-align: center;
   margin-top: 2.5rem;
+}
+.container-narrow { max-width: 760px; }
+
+/* ── Guía / contenido SEO ────────────────────────── */
+.guia-intro {
+  padding: 5rem 0;
+  background: #ffffff;
+}
+.guia-intro h2 {
+  color: #0f4c35;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: 1.25rem;
+  line-height: 1.2;
+}
+.guia-intro h3 {
+  color: #1a7d53;
+  font-size: 1.15rem;
+  margin-top: 2rem;
+  margin-bottom: 0.6rem;
+}
+.guia-intro p {
+  color: #374151;
+  line-height: 1.85;
+  font-size: 1.02rem;
+  margin-bottom: 1rem;
 }
 
 .btn {
@@ -352,6 +423,7 @@ const sorted = recentArticles
   .comparador,
   .categorias,
   .confianza,
+  .guia-intro,
   .articulos { padding: 3.5rem 0; }
   .section-header { margin-bottom: 2rem; }
 }

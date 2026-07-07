@@ -8,11 +8,11 @@ interface Props {
   image?: string;
 }
 
-const canonicalURL = `https://mimascotacubierta.com${Astro.url.pathname}`;
+const canonicalURL = `https://www.mimascotacubierta.com${Astro.url.pathname}`;
 const { title, description, image = '/hero.jpg' } = Astro.props;
 // Las redes sociales exigen una URL absoluta y un formato raster (PNG/JPG);
 // un SVG o una ruta relativa no se renderizan en la preview.
-const ogImageURL = new URL(image, 'https://mimascotacubierta.com/').href;
+const ogImageURL = new URL(image, 'https://www.mimascotacubierta.com/').href;
 ---
 
 <meta charset="utf-8" />

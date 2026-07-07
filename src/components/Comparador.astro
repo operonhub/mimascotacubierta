@@ -139,7 +139,7 @@ const cobCols: { key: keyof Seguro['coberturas']; label: string }[] = [
                   {isMulti && (
                     <select class="plan-selector" aria-label={`Elegir plan de ${first.nombre}`}>
                       {grupo.map((s, i) => (
-                        <option value={i}>{s.plan} — ${fmtPrice(s.precio_mensual)}/mes</option>
+                        <option value={i}>{s.plan} — ${fmtPrice(s.precio_mensual)}</option>
                       ))}
                     </select>
                   )}
