@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Comparador from '../../components/Comparador.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../lib/schema';
 
 const faqs = [
   {
@@ -17,20 +18,20 @@ const faqs = [
   },
 ];
 
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqs.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
-};
+const schema = [
+  faqPageSchema(faqs),
+  breadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Comparar seguros', path: '/comparar/' },
+    { name: 'Argentina', path: '/comparar/argentina/' },
+  ]),
+];
 ---
 
 <Layout
-  title="Seguros de mascotas en Argentina (2026) — Comparativa completa | MiMascotaCubierta.com"
+  title="Seguros para mascotas en Argentina: precios y cobertura"
   description="Comparamos todos los seguros de mascotas disponibles en Argentina. Precios reales en ARS, coberturas detalladas y opiniones verificadas."
+  schema={schema}
 >
   <!-- ─── A) HERO ─────────────────────────────────────── -->
   <section class="cmp-hero">
@@ -91,8 +92,6 @@ const faqSchema = {
       </div>
     </div>
   </section>
-
-  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <!-- Pre-selecciona Argentina en el comparador una vez que el
        script del componente terminó de inicializarse (evita la carrera

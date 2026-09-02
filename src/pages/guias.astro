@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import { getCollection } from 'astro:content';
 import { categorias } from '../data/categorias';
+import { breadcrumbSchema, collectionPageSchema } from '../lib/schema';
 
 const allArticles = await getCollection('blog', ({ data }) => !data.draft);
 const sorted = allArticles.sort(
@@ -12,11 +13,26 @@ const sorted = allArticles.sort(
 // Solo categorías que tienen al menos un artículo publicado
 const usedSlugs = new Set(sorted.map((a) => a.data.categorySlug));
 const cats = categorias.filter((c) => usedSlugs.has(c.slug));
+
+const schema = [
+  breadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Todas las guías', path: '/guias/' },
+  ]),
+  collectionPageSchema({
+    name: 'Todas las guías para mascotas',
+    description:
+      'Guías, comparativas y artículos sobre seguros, gastos veterinarios, salud y cuidados para perros y gatos en Argentina y México.',
+    path: '/guias/',
+    items: sorted.map((a) => ({ name: a.data.title, path: `/${a.id}/` })),
+  }),
+];
 ---
 
 <Layout
-  title="Todas las guías para mascotas | MiMascotaCubierta.com"
+  title="Todas las guías para mascotas | MiMascotaCubierta"
   description="Guías, comparativas y artículos sobre seguros, gastos veterinarios, salud y cuidados para perros y gatos en Argentina y México."
+  schema={schema}
 >
   <!-- ─── HERO ──────────────────────────────────────────── -->
   <section class="gh-hero">

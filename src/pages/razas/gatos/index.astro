@@ -13,8 +13,9 @@ const breeds = allArticles.sort((a, b) => a.data.title.localeCompare(b.data.titl
 ---
 
 <Layout
-  title="Razas de gatos — Salud, cuidados y gastos | MiMascotaCubierta.com"
+  title="Razas de gatos — Salud, cuidados y gastos | MiMascotaCubierta"
   description="Guías completas por raza de gato: enfermedades frecuentes, gastos veterinarios anuales y cuidados específicos."
+  noindex={breeds.length === 0}
 >
   <!-- ─── A) HERO ─────────────────────────────────────── -->
   <section class="cat-hero" style={`background:${cat.color}`}>

@@ -3,12 +3,18 @@ import Layout from '../../layouts/Layout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import { categorias } from '../../data/categorias';
 import { getCollection } from 'astro:content';
+import { breadcrumbSchema, collectionPageSchema } from '../../lib/schema';
 
 export async function getStaticPaths() {
-  // `razas` tiene su propia página estática (con subcategorías perros/gatos),
-  // así que se excluye acá para evitar una colisión de rutas en /razas/.
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const conArticulos = new Set(posts.map((p) => p.data.categorySlug));
+
+  // Solo se generan hubs que ya tienen al menos un artículo publicado.
+  // `razas` tiene su propia página estática (subcategorías perros/gatos), se excluye acá.
+  // Los hubs vacíos (urgencias, nutrición, viajes) no se rutean ni se enlazan
+  // hasta tener contenido: evita dar a Google páginas thin para indexar.
   return categorias
-    .filter((cat) => cat.slug !== 'razas')
+    .filter((cat) => cat.slug !== 'razas' && conArticulos.has(cat.slug))
     .map((cat) => ({
       params: { categoria: cat.slug },
       props: { cat },
@@ -30,11 +36,26 @@ const articles = allArticles.sort(
 const showCta = ['seguros-mascotas', 'gastos-veterinarios', 'urgencias'].includes(
   cat.slug,
 );
+
+const catPath = `/${cat.slug}/`;
+const schema = [
+  breadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: cat.nombre, path: catPath },
+  ]),
+  collectionPageSchema({
+    name: cat.nombre,
+    description: cat.descripcion,
+    path: catPath,
+    items: articles.map((a) => ({ name: a.data.title, path: `/${a.id}/` })),
+  }),
+];
 ---
 
 <Layout
-  title={`${cat.nombre} — Guías y comparativas | MiMascotaCubierta.com`}
+  title={`${cat.nombre} — Guías y comparativas | MiMascotaCubierta`}
   description={cat.descripcion}
+  schema={schema}
 >
   <!-- ─── A) HERO ─────────────────────────────────────── -->
   <section class="cat-hero" style={`background:${cat.color}`}>

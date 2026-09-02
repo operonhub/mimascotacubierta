@@ -1,0 +1,77 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Página no encontrada (404) | MiMascotaCubierta"
+  description="La página que buscás no existe o cambió de dirección."
+  noindex={true}
+>
+  <section class="nf">
+    <div class="nf-inner">
+      <span class="nf-code" aria-hidden="true">404</span>
+      <h1>No encontramos esta página</h1>
+      <p>
+        El enlace puede estar roto o la página se movió. Probá desde uno de estos
+        puntos de partida:
+      </p>
+      <div class="nf-links">
+        <a class="nf-btn" href="/comparar/">Comparar seguros</a>
+        <a class="nf-link" href="/seguros-mascotas/">Guías de seguros</a>
+        <a class="nf-link" href="/gastos-veterinarios/">Gastos veterinarios</a>
+        <a class="nf-link" href="/razas/">Razas</a>
+        <a class="nf-link" href="/guias/">Todas las guías</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .nf {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 6rem;
+    text-align: center;
+  }
+  .nf-code {
+    display: block;
+    font-size: clamp(3.5rem, 12vw, 6rem);
+    font-weight: 800;
+    color: #6efac1;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+  .nf h1 {
+    color: #0f4c35;
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    margin-bottom: 1rem;
+  }
+  .nf p {
+    color: #475569;
+    line-height: 1.75;
+    margin-bottom: 2rem;
+  }
+  .nf-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .nf-btn {
+    display: inline-block;
+    background: #0f4c35;
+    color: #fff;
+    font-weight: 700;
+    padding: 0.85rem 1.8rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .nf-btn:hover { background: #1a7d53; text-decoration: none; }
+  .nf-link {
+    color: #1a7d53;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .nf-link:hover { text-decoration: underline; }
+</style>

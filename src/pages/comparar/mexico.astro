@@ -12,20 +12,12 @@ const faqs = [
   },
 ];
 
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqs.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
-};
 ---
 
 <Layout
-  title="Seguros de mascotas en México (2026) — Comparativa completa | MiMascotaCubierta.com"
+  title="Seguros para mascotas en México: precios y cobertura"
   description="Comparamos los mejores seguros de mascotas disponibles en México. Precios en MXN, coberturas detalladas y guías de contratación."
+  noindex={true}
 >
   <!-- ─── A) HERO ─────────────────────────────────────── -->
   <section class="cmp-hero">
@@ -99,8 +91,6 @@ const faqSchema = {
       </div>
     </div>
   </section>
-
-  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 </Layout>
 
 <style>

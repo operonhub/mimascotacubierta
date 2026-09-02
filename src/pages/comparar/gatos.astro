@@ -1,11 +1,21 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Comparador from '../../components/Comparador.astro';
+import { breadcrumbSchema } from '../../lib/schema';
+
+const schema = [
+  breadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Comparar seguros', path: '/comparar/' },
+    { name: 'Gatos', path: '/comparar/gatos/' },
+  ]),
+];
 ---
 
 <Layout
-  title="Seguros para gatos (2026) — Comparativa y precios | MiMascotaCubierta.com"
+  title="Seguros para gatos: precios, cobertura y comparación"
   description="Los mejores seguros para gatos en Argentina y México. Comparamos planes, coberturas y precios reales."
+  schema={schema}
 >
   <!-- ─── A) HERO ─────────────────────────────────────── -->
   <section class="cmp-hero">
@@ -34,9 +44,9 @@ import Comparador from '../../components/Comparador.astro';
           <span class="link-text">¿Buscás información sobre tu raza de gato?</span>
           <span class="link-arrow" aria-hidden="true">→</span>
         </a>
-        <a class="link-card" href="/salud-enfermedades">
-          <span class="link-emoji" aria-hidden="true">🏥</span>
-          <span class="link-text">Enfermedades frecuentes en gatos</span>
+        <a class="link-card" href="/gastos-veterinarios">
+          <span class="link-emoji" aria-hidden="true">💰</span>
+          <span class="link-text">Guías de gastos veterinarios</span>
           <span class="link-arrow" aria-hidden="true">→</span>
         </a>
       </div>

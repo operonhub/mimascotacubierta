@@ -7,19 +7,29 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  noindex?: boolean;
+  schema?: Record<string, unknown>[];
 }
 
 const {
   title,
   description = 'Compara seguros para mascotas en México y Argentina. Información real, precios actualizados y guías completas para cuidar a tu perro o gato.',
   ogImage = '/hero.jpg',
+  noindex = false,
+  schema = [],
 } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="es">
   <head>
-    <BaseHead title={title} description={description} image={ogImage} />
+    <BaseHead
+      title={title}
+      description={description}
+      image={ogImage}
+      noindex={noindex}
+      schema={schema}
+    />
     <slot name="head" />
   </head>
   <body>

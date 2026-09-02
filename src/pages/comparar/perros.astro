@@ -1,11 +1,21 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Comparador from '../../components/Comparador.astro';
+import { breadcrumbSchema } from '../../lib/schema';
+
+const schema = [
+  breadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Comparar seguros', path: '/comparar/' },
+    { name: 'Perros', path: '/comparar/perros/' },
+  ]),
+];
 ---
 
 <Layout
-  title="Seguros para perros (2026) — Comparativa y precios | MiMascotaCubierta.com"
+  title="Seguros para perros: precios, cobertura y comparación"
   description="Los mejores seguros para perros en Argentina y México. Comparamos precios, coberturas y opiniones para que elijas el mejor plan."
+  schema={schema}
 >
   <!-- ─── A) HERO ─────────────────────────────────────── -->
   <section class="cmp-hero">

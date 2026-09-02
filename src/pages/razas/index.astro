@@ -1,8 +1,16 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { categorias } from '../../data/categorias';
+import { breadcrumbSchema } from '../../lib/schema';
 
 const cat = categorias.find((c) => c.slug === 'razas')!;
+
+const schema = [
+  breadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: cat.nombre, path: '/razas/' },
+  ]),
+];
 
 const subcats = [
   {
@@ -23,8 +31,9 @@ const subcats = [
 ---
 
 <Layout
-  title={`${cat.nombre} — Guías y comparativas | MiMascotaCubierta.com`}
+  title={`${cat.nombre} — Guías y comparativas | MiMascotaCubierta`}
   description={cat.descripcion}
+  schema={schema}
 >
   <!-- ─── HERO ────────────────────────────────────────── -->
   <section class="cat-hero" style={`background:${cat.color}`}>

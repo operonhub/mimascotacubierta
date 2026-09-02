@@ -2,6 +2,7 @@
 import Layout from './Layout.astro';
 import segurosData from '../data/seguros.json';
 import { getCollection } from 'astro:content';
+import { abs, breadcrumbSchema, faqPageSchema } from '../lib/schema';
 
 interface FaqItem {
   question: string;
@@ -55,40 +56,42 @@ const topSeguros = [...segurosData.seguros]
   .sort((a, b) => a.precio_mensual - b.precio_mensual)
   .slice(0, 3);
 
+const pageURL = abs(Astro.url.pathname);
+
 // Schema Article (siempre presente)
 const articleSchema = {
-  '@context': 'https://schema.org',
   '@type': 'Article',
   headline: title,
   description: description,
+  image: abs(image ?? '/hero.jpg'),
+  inLanguage: 'es',
   author: {
     '@type': 'Organization',
     name: author,
     url: 'https://www.mimascotacubierta.com',
   },
-  publisher: {
-    '@type': 'Organization',
-    name: 'MiMascotaCubierta.com',
-    url: 'https://www.mimascotacubierta.com',
-  },
+  publisher: { '@id': 'https://www.mimascotacubierta.com/#organization' },
   datePublished: d.toISOString(),
   dateModified: d.toISOString(),
-  url: `https://www.mimascotacubierta.com${Astro.url.pathname}`,
+  url: pageURL,
+  mainEntityOfPage: pageURL,
 };
 
 // Schema FAQPage (solo si hay preguntas)
-const faqSchema =
-  faq.length > 0
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: faq.map((f) => ({
-          '@type': 'Question',
-          name: f.question,
-          acceptedAnswer: { '@type': 'Answer', text: f.answer },
-        })),
-      }
-    : null;
+const faqSchema = faq.length > 0 ? faqPageSchema(faq) : null;
+
+// Breadcrumb: mismas migas que se muestran en pantalla
+const breadcrumb = breadcrumbSchema([
+  { name: 'Inicio', path: '/' },
+  { name: category, path: `/${categorySlug}/` },
+  { name: title, path: Astro.url.pathname },
+]);
+
+const schemaNodes = [
+  articleSchema,
+  ...(faqSchema ? [faqSchema] : []),
+  breadcrumb,
+];
 
 // Artículos relacionados dinámicos — excluyendo el actual, ordenados por fecha
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
@@ -109,20 +112,7 @@ const relatedBottom = [
 ].slice(0, 3);
 ---
 
-<Layout title={title} description={description}>
-  <script
-    type="application/ld+json"
-    slot="head"
-    set:html={JSON.stringify(articleSchema)}
-  />
-  {faqSchema && (
-    <script
-      type="application/ld+json"
-      slot="head"
-      set:html={JSON.stringify(faqSchema)}
-    />
-  )}
-
+<Layout title={title} description={description} ogImage={image} schema={schemaNodes}>
   <div class="article-wrap">
     <div class="article-grid">
       <!-- ─── CONTENIDO PRINCIPAL ─────────────────────── -->

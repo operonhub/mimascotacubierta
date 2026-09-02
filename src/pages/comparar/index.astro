@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Comparador from '../../components/Comparador.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../lib/schema';
 
 const faqs = [
   {
@@ -25,20 +26,19 @@ const faqs = [
   },
 ];
 
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqs.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
-};
+const schema = [
+  faqPageSchema(faqs),
+  breadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Comparar seguros', path: '/comparar/' },
+  ]),
+];
 ---
 
 <Layout
-  title="Comparar seguros de mascotas — México y Argentina | MiMascotaCubierta.com"
+  title="Comparar seguros para mascotas en Argentina y México"
   description="Comparamos todos los seguros de mascotas disponibles en Argentina y México. Precios reales, coberturas detalladas y opiniones verificadas."
+  schema={schema}
 >
   <!-- Hero -->
   <section class="cmp-hero">
@@ -77,8 +77,6 @@ const faqSchema = {
       </div>
     </div>
   </section>
-
-  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 </Layout>
 
 <style>
